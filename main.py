@@ -19,8 +19,9 @@ import sys
 import syslog
 import datetime
 
-import mysql.connector
-
+#import mysql.connector
+from libby import mysqldose
+from libby.mysqldose import mysqldose
 
 garagn_tcp_addr = 'garagn.fritz.box'
 garagn_tcp_port = 80
@@ -57,18 +58,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #    print ("Pressed On!")
 
 
-    def connect_mysql(self):
-        pass
-
-
     def hole_temp_db(self):
-        pass
+        self.labelTab1Temp1.setText(str(self.db.read_latest("WohnzimmerTemp"))+"°C")
+        self.labelTab1Temp2.setText(str(self.db.read_latest("ArbeitszimmerTemp"))+"°C")
+        self.labelTab1Temp3.setText(str("--- °C"))
+        self.labelTab1Temp4.setText(str(self.db.read_latest("TerrasseTemp"))+"°C")
 
     def update_temp(self):
         if(self.holetemp <= 5):
             self.holetemp += 1
         else:
-            self.hole_temp_db
+            self.hole_temp_db()
             self.holetemp = 0
 
 	
@@ -77,14 +77,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             json_cmd = '{"Aktion" : "Abfrage", "Parameter" : "Torstatus"}\r'
             status = sende(1, garagn_tcp_addr, garagn_tcp_port, json_cmd)
             if(status == "Auf"):
-                self.labelTorstatus.setText("Tor auf!")
+                self.labelTorstatus.setText("Tor ist offen!")
                 self.labelTorstatus.setStyleSheet('color: red')
             elif(status == "Zu"):
-                self.labelTorstatus.setText("Tor zu!")
+                self.labelTorstatus.setText("Tor ist zu.")
                 self.labelTorstatus.setStyleSheet('color: green')
                 self.schaunach = 0
-            else:
-                self.schaunach += 1
+        else:
+            self.schaunach += 1
 
     def _uhr(self):
         while(not self.t_stop.is_set()): 
@@ -122,6 +122,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
     def __init__(self):
+        
+        self.mysqluser = 'heizung'
+        self.mysqlpass = 'heizung'
+        self.mysqlserv = 'dose.fritz.box'
+        self.mysqldb   = 'heizung'
         super(self.__class__, self).__init__()
         self.setupUi(self) # gets defined in the UI file
 
@@ -131,6 +136,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.uhr()
         self.operate = 0
+        self.db = mysqldose(self.mysqluser, self.mysqlpass, self.mysqlserv, self.mysqldb)
+        #self.mysql_success = False
+        self.db.start()
+        self.hole_temp_db()
+
+
 
 
 def main():
