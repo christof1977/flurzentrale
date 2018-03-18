@@ -63,6 +63,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.labelTab1Temp2.setText(str(self.db.read_latest("ArbeitszimmerTemp"))+"°C")
         self.labelTab1Temp3.setText(str("--- °C"))
         self.labelTab1Temp4.setText(str(self.db.read_latest("TerrasseTemp"))+"°C")
+        
+        self.labelTab2Temp1.setText(str(self.db.read_latest("LeahTemp"))+"°C")
+        self.labelTab2Temp2.setText(str(self.db.read_latest("FelixTemp"))+"°C")
+        self.labelTab2Temp3.setText(str(self.db.read_latest("BadDGTemp"))+"°C")
+        self.labelTab2Temp4.setText(str("--- °C"))
 
     def update_temp(self):
         if(self.holetemp <= 5):

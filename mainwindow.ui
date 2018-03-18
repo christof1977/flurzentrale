@@ -20,7 +20,7 @@
    <widget class="QLabel" name="labelTime">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>130</x>
       <y>290</y>
       <width>91</width>
       <height>21</height>
@@ -28,28 +28,28 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>25:25:61</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;25:25:61&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="labelDate">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>10</x>
       <y>290</y>
-      <width>111</width>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -70,7 +70,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>18</pointsize>
+      <pointsize>16</pointsize>
       <weight>50</weight>
       <bold>false</bold>
       <stylestrategy>PreferDefault</stylestrategy>
@@ -119,7 +119,7 @@ QTabBar::tab:selected
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="iconSize">
      <size>
@@ -144,23 +144,32 @@ QTabBar::tab:selected
       </font>
      </property>
      <attribute name="title">
-      <string>Temp EG</string>
+      <string>Unten</string>
      </attribute>
      <widget class="QLabel" name="labelTab1Temp1">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>45</x>
         <y>60</y>
-        <width>151</width>
-        <height>51</height>
+        <width>150</width>
+        <height>50</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
-       <string notr="true">font: 48pt &quot;.SF NS Text&quot;;
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
 color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
-       <string>99.9°C</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -169,18 +178,27 @@ color: rgb(255, 255, 255);</string>
      <widget class="QLabel" name="labelTab1Temp2">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>285</x>
         <y>60</y>
-        <width>151</width>
-        <height>51</height>
+        <width>150</width>
+        <height>50</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
-       <string notr="true">font: 48pt &quot;.SF NS Text&quot;;
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
 color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
-       <string>99.9°C</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -189,18 +207,27 @@ color: rgb(255, 255, 255);</string>
      <widget class="QLabel" name="labelTab1Temp3">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>45</x>
         <y>160</y>
-        <width>151</width>
-        <height>51</height>
+        <width>150</width>
+        <height>50</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
-       <string notr="true">font: 48pt &quot;.SF NS Text&quot;;
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
 color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
-       <string>99.9°C</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -209,18 +236,18 @@ color: rgb(255, 255, 255);</string>
      <widget class="QLabel" name="labelTab1Temp4">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>285</x>
         <y>160</y>
-        <width>151</width>
-        <height>51</height>
+        <width>150</width>
+        <height>50</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">font: 48pt &quot;.SF NS Text&quot;;
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
 color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
-       <string>99.9°C</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -229,9 +256,9 @@ color: rgb(255, 255, 255);</string>
      <widget class="QLabel" name="labelTab1Temp1Label">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>45</x>
         <y>30</y>
-        <width>81</width>
+        <width>150</width>
         <height>16</height>
        </rect>
       </property>
@@ -241,13 +268,16 @@ color: rgb(255, 255, 255);</string>
       <property name="text">
        <string>Wohnzimmer</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
      <widget class="QLabel" name="labelTab1Temp2Label">
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>285</x>
         <y>30</y>
-        <width>91</width>
+        <width>150</width>
         <height>16</height>
        </rect>
       </property>
@@ -257,13 +287,16 @@ color: rgb(255, 255, 255);</string>
       <property name="text">
        <string>Arbeitszimmer</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
      <widget class="QLabel" name="labelTab1Temp3Label">
       <property name="geometry">
        <rect>
-        <x>100</x>
-        <y>140</y>
-        <width>31</width>
+        <x>45</x>
+        <y>130</y>
+        <width>150</width>
         <height>16</height>
        </rect>
       </property>
@@ -273,13 +306,16 @@ color: rgb(255, 255, 255);</string>
       <property name="text">
        <string>Bad</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
      <widget class="QLabel" name="labelTab1Temp4Label">
       <property name="geometry">
        <rect>
-        <x>300</x>
-        <y>140</y>
-        <width>60</width>
+        <x>285</x>
+        <y>130</y>
+        <width>150</width>
         <height>16</height>
        </rect>
       </property>
@@ -289,12 +325,207 @@ color: rgb(255, 255, 255);</string>
       <property name="text">
        <string>Terrasse</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tabDg">
      <attribute name="title">
-      <string>Temp DG</string>
+      <string>Oben</string>
      </attribute>
+     <widget class="QLabel" name="labelTab2Temp1">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>60</y>
+        <width>150</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab2Temp1Label">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>30</y>
+        <width>150</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Leah</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab2Temp2">
+      <property name="geometry">
+       <rect>
+        <x>285</x>
+        <y>60</y>
+        <width>150</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab2Temp3">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>160</y>
+        <width>150</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab2Temp4">
+      <property name="geometry">
+       <rect>
+        <x>285</x>
+        <y>160</y>
+        <width>150</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab2Temp2Label">
+      <property name="geometry">
+       <rect>
+        <x>285</x>
+        <y>30</y>
+        <width>150</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Felix</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab2Temp3Label">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>130</y>
+        <width>150</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Bad</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab2Temp4Label">
+      <property name="geometry">
+       <rect>
+        <x>285</x>
+        <y>130</y>
+        <width>150</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Balkon</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tabGarage">
      <attribute name="title">
@@ -520,7 +751,7 @@ background-color: rgb(40,40,40)
       </property>
       <property name="font">
        <font>
-        <pointsize>40</pointsize>
+        <pointsize>30</pointsize>
        </font>
       </property>
       <property name="styleSheet">
@@ -546,14 +777,14 @@ background-color: rgb(40,40,40)
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Ups ...</string>
+     <string>Öhäm ...</string>
     </property>
    </widget>
   </widget>
