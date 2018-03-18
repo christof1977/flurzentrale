@@ -18,6 +18,7 @@ import time
 import sys
 import syslog
 import datetime
+import json
 
 #import mysql.connector
 from libby import mysqldose
@@ -29,25 +30,13 @@ buffer_size = 1024
 
 
 def sende(s_tcp_sock, tcp_addr, tcp_port, json_cmd):
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((tcp_addr, tcp_port))
-	#print(json_cmd)
-	s.send(json_cmd.encode())
-	#time.sleep(1)
-	data = s.recv(buffer_size)
-	#print("received data: ")
-	#print(data.decode())
-	return data.decode()
-	s.close()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((tcp_addr, tcp_port))
+    s.send(json_cmd.encode())
+    data = s.recv(buffer_size, socket.MSG_WAITALL)
+    return data.decode()
+    s.close()
 
-
-# class Anzeige(QtWidgets.QMainWindow):            #
-#     def __init__(self, parent=None):
-#         QtWidgets.QMainWindow.__init__(self, parent)   #
-#         self.ui = Ui_MainWindow()
-#         self.ui.setupUi(self)
-#  
-#         
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -79,15 +68,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 	
     def update_torstatus(self):
         if(self.schaunach == 5):
-            json_cmd = '{"Aktion" : "Abfrage", "Parameter" : "Torstatus"}\r'
-            status = sende(1, garagn_tcp_addr, garagn_tcp_port, json_cmd)
-            if(status == "Auf"):
+            json_cmd = '{"Aktion" : "Abfrage", "Parameter" : "Torstatus"}\n'
+            data = sende(1, garagn_tcp_addr, garagn_tcp_port, json_cmd)
+            status = json.loads(data)
+            if(status['Aktion'] == "Antwort" and status['Parameter'] == "Auf"):
                 self.labelTorstatus.setText("Tor ist offen!")
                 self.labelTorstatus.setStyleSheet('color: red')
-            elif(status == "Zu"):
+            elif(status['Aktion'] == "Antwort" and status['Parameter'] == "Zu"):
                 self.labelTorstatus.setText("Tor ist zu.")
                 self.labelTorstatus.setStyleSheet('color: green')
-                self.schaunach = 0
+            self.schaunach = 0
         else:
             self.schaunach += 1
 
@@ -111,15 +101,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def uhr(self):
         self.uhrzeitdp = 1
-        self.schaunach = 0
+        self.schaunach = 0 
         self.holetemp = 0
         threading.Thread(target=self._uhr).start()
 
     def pushButtonTorClicked(self):
-        time.sleep(.5)
-        json_cmd = '{"Aktion" : "Kommando", "Parameter" : "TorAufZu"}\r'
+        #time.sleep(.5)
+        json_cmd = '{"Aktion" : "Kommando", "Parameter" : "TorAufZu"}\n'
         self.labelStatus.setText("Warte kurz")
-        if(sende(1, garagn_tcp_addr, garagn_tcp_port, json_cmd)=="Gemacht!"):
+        data = sende(1, garagn_tcp_addr, garagn_tcp_port, json_cmd)
+        status = json.loads(data)
+        if(status['Aktion'] == "Antwort" and status['Parameter'] == "OK"):
             self.labelStatus.setText("Bassd")
         else:
             self.labelStatus.setText("Ups ...")
