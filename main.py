@@ -29,14 +29,26 @@ garagn_tcp_port = 80
 buffer_size = 1024
 
 
-def sende(s_tcp_sock, tcp_addr, tcp_port, json_cmd):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((tcp_addr, tcp_port))
-    s.send(json_cmd.encode())
-    data = s.recv(buffer_size, socket.MSG_WAITALL)
-    return data.decode()
-    s.close()
+def sende(tcp_sock, tcp_addr, tcp_port, json_cmd):
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((tcp_addr, tcp_port))
+        s.send(json_cmd.encode())
+        data = s.recv(buffer_size, socket.MSG_WAITALL)
+        return data.decode()
+        s.close()
+    except Exception as e:
+        #print("Verbinungsfehler")
+        return '{"Aktion" : "Fehler", "Parameter" : "Verbindung"}\n'
 
+def json_dec(json_string):
+    try:
+        out = json.loads(json_string)
+    except:
+        json_string = '{"Aktion" : "Fehler", "Parameter" : "JSON"}\n'
+        out = json.loads(json_string)
+        #print("Json-Fehler")
+    return out
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -45,7 +57,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 ### functions for the buttons to call
 #def pressedOnButton(self):
 #    print ("Pressed On!")
-
 
     def hole_temp_db(self):
         self.labelTab1Temp1.setText(str(self.db.read_latest("WohnzimmerTemp"))+"°C")
@@ -70,7 +81,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if(self.schaunach == 5):
             json_cmd = '{"Aktion" : "Abfrage", "Parameter" : "Torstatus"}\n'
             data = sende(1, garagn_tcp_addr, garagn_tcp_port, json_cmd)
-            status = json.loads(data)
+            #status = json.loads(data)
+            status = json_dec(data)
             if(status['Aktion'] == "Antwort" and status['Parameter'] == "Auf"):
                 self.labelTorstatus.setText("Tor ist offen!")
                 self.labelTorstatus.setStyleSheet('color: red')
