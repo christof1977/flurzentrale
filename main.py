@@ -69,10 +69,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.labelTab2Temp3.setText(str(self.db.read_latest("BadDGTemp"))+"°C")
         self.labelTab2Temp4.setText(str("--- °C"))
 
-        self.labelTab4Temp1.setText(str(self.db.read_latest("kVorlauf"))+"°C")
-        self.labelTab4Temp2.setText(str(self.db.read_latest("kRuecklauf"))+"°C")
-        self.labelTab4Temp3.setText(str(self.db.read_latest("ntVorlaufDGTemp"))+"°C")
-        self.labelTab4Temp4.setText(str(self.db.read_latest("ntRuecklaufDGTemp"))+"°C")
+        self.labelTab4Temp1.setText(str(round(self.db.read_latest("kVorlauf"),1))+"°C")
+        self.labelTab4Temp2.setText(str(round(self.db.read_latest("kRuecklauf"),1))+"°C")
+        self.labelTab4Temp3.setText(str(round(self.db.read_latest("ntVorlaufDGTemp"),1))+"°C")
+        self.labelTab4Temp4.setText(str(round(self.db.read_latest("ntRuecklaufDGTemp"),1))+"°C")
 
     def update_temp(self):
         if(self.holetemp <= 5):
