@@ -93,7 +93,7 @@
      <bool>false</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">QTabBar::tab { height: 40px; width: 150px; }
+     <string notr="true">QTabBar::tab { height: 40px; width: 100px; }
 /*QTabBar::tab:text
 {
     border-top-color: #1D2A32;
@@ -119,7 +119,7 @@ QTabBar::tab:selected
      <enum>QTabWidget::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="iconSize">
      <size>
@@ -759,6 +759,203 @@ background-color: rgb(40,40,40)
       </property>
       <property name="text">
        <string>Tor ist offen!</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tabHeizung">
+     <attribute name="title">
+      <string>Heizung</string>
+     </attribute>
+     <widget class="QLabel" name="labelTab4Temp1">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>60</y>
+        <width>150</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab4Temp1Label">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>30</y>
+        <width>150</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Heizung VL</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab4Temp3">
+      <property name="geometry">
+       <rect>
+        <x>285</x>
+        <y>60</y>
+        <width>150</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab4Temp2">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>160</y>
+        <width>150</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab4Temp4">
+      <property name="geometry">
+       <rect>
+        <x>285</x>
+        <y>160</y>
+        <width>150</width>
+        <height>50</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>.SF NS Text</family>
+        <pointsize>30</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 30pt &quot;.SF NS Text&quot;;
+color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:30pt;&quot;&gt;99.9°C&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab4Temp2Label_2">
+      <property name="geometry">
+       <rect>
+        <x>285</x>
+        <y>30</y>
+        <width>150</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>FBH VL</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab4Temp2Label">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>130</y>
+        <width>150</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Heizung RL</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelTab4Temp4Label">
+      <property name="geometry">
+       <rect>
+        <x>285</x>
+        <y>130</y>
+        <width>150</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>FBH RL</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
