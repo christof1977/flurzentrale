@@ -19,6 +19,8 @@ import sys
 import syslog
 import datetime
 import json
+from kodijson import Kodi
+
 
 #import mysql.connector
 from libby import mysqldose
@@ -27,6 +29,16 @@ from libby.mysqldose import mysqldose
 garagn_tcp_addr = 'garagn.fritz.box'
 garagn_tcp_port = 80
 buffer_size = 1024
+osmd  = "http://osmd.fritz.box/jsonrpc"
+radioUrls = ["http://webstream.gong971.de/gong971",
+             "http://nbg.starfm.de/player/pls/nbg_pls_mp3.php.pls",
+             "http://www.antenne.de/webradio/antenne.m3u",
+             "http://www.rockantenne.de/webradio/rockantenne.aac.pls"]
+radioNames = ["Gong",
+              "StarFM",
+              "Antenne",
+              "Rock Ant"]
+
 
 
 def sende(tcp_sock, tcp_addr, tcp_port, json_cmd):
@@ -133,6 +145,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.labelStatus.setText("Ups ...")
 
+    def pushButtonRadio0Clicked(self):
+        self.kodi.Player.Open({"item": {"file": radioUrls[0]}})
+        print("Playing", radioNames[0])
+
+    def pushButtonRadio1Clicked(self):
+        self.kodi.Player.Open({"item": {"file": radioUrls[1]}})
+        print("Playing", radioNames[1])
+
+    def pushButtonRadio2Clicked(self):
+        self.kodi.Player.Open({"item": {"file": radioUrls[2]}})
+        print("Playing", radioNames[2])
+
+    def pushButtonRadio3Clicked(self):
+        self.kodi.Player.Open({"item": {"file": radioUrls[3]}})
+        print("Playing", radioNames[3])
+
+
+    def defineRadioButtons(self):
+        self.pushButtonRadio0.setText(radioNames[0])
+        self.pushButtonRadio1.setText(radioNames[1])
+        self.pushButtonRadio2.setText(radioNames[2])
+        self.pushButtonRadio3.setText(radioNames[3])
+
+
+    def startRadio(self):
+        self.kodi = Kodi(osmd)
+        pass
+
+
+    def stopRadio(self):
+        try:
+            playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
+            result = self.kodi.Player.Stop({"playerid": playerid})
+        except:
+            pass
+
 
 
     def __init__(self):
@@ -146,7 +194,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
         self.pushButtonTor.clicked.connect(self.pushButtonTorClicked)
+        self.pushButtonRadioStop.clicked.connect(self.stopRadio)
+        self.pushButtonRadio0.clicked.connect(self.pushButtonRadio0Clicked)
+        self.pushButtonRadio1.clicked.connect(self.pushButtonRadio1Clicked)
+        self.pushButtonRadio2.clicked.connect(self.pushButtonRadio2Clicked)
+        self.pushButtonRadio3.clicked.connect(self.pushButtonRadio3Clicked)
         self.t_stop = threading.Event()
+        self.defineRadioButtons()
+        self.startRadio()
 
         self.uhr()
         self.operate = 0
@@ -154,7 +209,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #self.mysql_success = False
         self.db.start()
         self.hole_temp_db()
-
 
 
 
