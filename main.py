@@ -20,7 +20,7 @@ import syslog
 import datetime
 import json
 from kodijson import Kodi
-
+from libby import remoteAmpiUdp
 
 #import mysql.connector
 from libby import mysqldose
@@ -30,6 +30,10 @@ garagn_tcp_addr = 'garagn.fritz.box'
 garagn_tcp_port = 80
 buffer_size = 1024
 osmd  = "http://osmd.fritz.box/jsonrpc"
+ampi = "osmd.fritz.box"
+ampiPort = 5005
+
+
 radioUrls = ["http://webstream.gong971.de/gong971",
              "http://nbg.starfm.de/player/pls/nbg_pls_mp3.php.pls",
              "http://www.antenne.de/webradio/antenne.m3u",
@@ -73,20 +77,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #    print ("Pressed On!")
 
     def hole_temp_db(self):
-        self.labelTab1Temp1.setText(str(self.db.read_latest("WohnzimmerTemp"))+"°C")
-        self.labelTab1Temp2.setText(str(self.db.read_latest("ArbeitszimmerTemp"))+"°C")
+        self.labelTab1Temp1.setText(str(self.db.read_one("WohnzimmerTemp"))+"°C")
+        self.labelTab1Temp2.setText(str(self.db.read_one("ArbeitszimmerTemp"))+"°C")
         self.labelTab1Temp3.setText(str("--- °C"))
-        self.labelTab1Temp4.setText(str(self.db.read_latest("TerrasseTemp"))+"°C")
+        self.labelTab1Temp4.setText(str(self.db.read_one("TerrasseTemp"))+"°C")
         
-        self.labelTab2Temp1.setText(str(self.db.read_latest("LeahTemp"))+"°C")
-        self.labelTab2Temp2.setText(str(self.db.read_latest("FelixTemp"))+"°C")
-        self.labelTab2Temp3.setText(str(self.db.read_latest("BadDGTemp"))+"°C")
+        self.labelTab2Temp1.setText(str(self.db.read_one("LeahTemp"))+"°C")
+        self.labelTab2Temp2.setText(str(self.db.read_one("FelixTemp"))+"°C")
+        self.labelTab2Temp3.setText(str(self.db.read_one("BadDGTemp"))+"°C")
         self.labelTab2Temp4.setText(str("--- °C"))
 
-        self.labelTab4Temp1.setText(str(round(self.db.read_latest("kVorlauf"),1))+"°C")
-        self.labelTab4Temp2.setText(str(round(self.db.read_latest("kRuecklauf"),1))+"°C")
-        self.labelTab4Temp3.setText(str(round(self.db.read_latest("ntVorlaufDGTemp"),1))+"°C")
-        self.labelTab4Temp4.setText(str(round(self.db.read_latest("ntRuecklaufDGTemp"),1))+"°C")
+        self.labelTab4Temp1.setText(str(round(self.db.read_one("kVorlauf"),1))+"°C")
+        self.labelTab4Temp2.setText(str(round(self.db.read_one("kRuecklauf"),1))+"°C")
+        self.labelTab4Temp3.setText(str(round(self.db.read_one("ntVorlaufDGTemp"),1))+"°C")
+        self.labelTab4Temp4.setText(str(round(self.db.read_one("ntRuecklaufDGTemp"),1))+"°C")
 
     def update_temp(self):
         if(self.holetemp <= 5):
@@ -164,6 +168,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         pass
 
     def playRadio(self):
+        remoteAmpiUdp.sende(None, ampi, ampiPort, "Himbeer314")
         radio2play = self.listWidgetRadio.currentItem().text()
         try:
             radioUrl = radioUrls[radioNames.index(radio2play)]
@@ -171,23 +176,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print("No URL found!")
         try:
             ret = self.kodi.Player.Open({"item": {"file": radioUrl}})
-            print(ret)
+            #print(ret)
             print("Starting", radioUrl)
         except Exception as e:
             print("Could not start radio!", radioUrl)
-            print(str(e))
+            #print(str(e))
 
     def stopRadio(self):
+        remoteAmpiUdp.sende(None, ampi, ampiPort, "Schneitzlberger")
         try:
             playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
             result = self.kodi.Player.Stop({"playerid": playerid})
         except:
             pass
 
+    def volUp(self):
+        remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_up")
 
+    def volDown(self):
+        remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_down")
 
     def __init__(self):
-        
         self.mysqluser = 'heizung'
         self.mysqlpass = 'heizung'
         self.mysqlserv = 'dose.fritz.box'
@@ -199,6 +208,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButtonTor.clicked.connect(self.pushButtonTorClicked)
         self.pushButtonRadioStop.clicked.connect(self.stopRadio)
         self.pushButtonRadioPlay.clicked.connect(self.playRadio)
+        self.pushButtonVolDown.clicked.connect(self.volDown)
+        self.pushButtonVolUp.clicked.connect(self.volUp)
         self.t_stop = threading.Event()
         self.defineRadioList()
         self.startRadio()
