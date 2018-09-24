@@ -972,9 +972,9 @@ color: rgb(255, 255, 255);</string>
      <widget class="QPushButton" name="pushButtonRadioStop">
       <property name="geometry">
        <rect>
-        <x>130</x>
+        <x>170</x>
         <y>170</y>
-        <width>111</width>
+        <width>141</width>
         <height>51</height>
        </rect>
       </property>
@@ -1202,7 +1202,7 @@ background-color: rgb(40,40,40)
        <rect>
         <x>10</x>
         <y>170</y>
-        <width>111</width>
+        <width>141</width>
         <height>51</height>
        </rect>
       </property>
