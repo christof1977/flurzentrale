@@ -33,11 +33,13 @@ osmd  = "http://osmd.fritz.box/jsonrpc"
 radioUrls = ["http://webstream.gong971.de/gong971",
              "http://nbg.starfm.de/player/pls/nbg_pls_mp3.php.pls",
              "http://www.antenne.de/webradio/antenne.m3u",
-             "http://www.rockantenne.de/webradio/rockantenne.aac.pls"]
+             "http://www.rockantenne.de/webradio/rockantenne.aac.pls"
+             ]
 radioNames = ["Gong",
               "StarFM",
-              "Antenne",
-              "Rock Ant"]
+              "Antenne Bayern",
+              "Rock Antenne"
+              ]
 
 
 
@@ -145,34 +147,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.labelStatus.setText("Ups ...")
 
-    def pushButtonRadio0Clicked(self):
-        self.kodi.Player.Open({"item": {"file": radioUrls[0]}})
-        print("Playing", radioNames[0])
 
-    def pushButtonRadio1Clicked(self):
-        self.kodi.Player.Open({"item": {"file": radioUrls[1]}})
-        print("Playing", radioNames[1])
-
-    def pushButtonRadio2Clicked(self):
-        self.kodi.Player.Open({"item": {"file": radioUrls[2]}})
-        print("Playing", radioNames[2])
-
-    def pushButtonRadio3Clicked(self):
-        self.kodi.Player.Open({"item": {"file": radioUrls[3]}})
-        print("Playing", radioNames[3])
-
-
-    def defineRadioButtons(self):
-        self.pushButtonRadio0.setText(radioNames[0])
-        self.pushButtonRadio1.setText(radioNames[1])
-        self.pushButtonRadio2.setText(radioNames[2])
-        self.pushButtonRadio3.setText(radioNames[3])
-
+    def defineRadioList(self):
+        for radioName in radioNames:
+            item = QtWidgets.QListWidgetItem(radioName)
+            font = QtGui.QFont()
+            font.setPointSize(24)
+            item.setFont(font)
+            brush = QtGui.QBrush(QtGui.QColor(162, 162, 162))
+            brush.setStyle(QtCore.Qt.NoBrush)
+            item.setForeground(brush)
+            self.listWidgetRadio.addItem(item)
 
     def startRadio(self):
         self.kodi = Kodi(osmd)
         pass
 
+    def playRadio(self):
+        radio2play = self.listWidgetRadio.currentItem().text()
+        try:
+            radioUrl = radioUrls[radioNames.index(radio2play)]
+        except:
+            print("No URL found!")
+        try:
+            ret = self.kodi.Player.Open({"item": {"file": radioUrl}})
+            print(ret)
+            print("Starting", radioUrl)
+        except Exception as e:
+            print("Could not start radio!", radioUrl)
+            print(str(e))
 
     def stopRadio(self):
         try:
@@ -195,12 +198,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.pushButtonTor.clicked.connect(self.pushButtonTorClicked)
         self.pushButtonRadioStop.clicked.connect(self.stopRadio)
-        self.pushButtonRadio0.clicked.connect(self.pushButtonRadio0Clicked)
-        self.pushButtonRadio1.clicked.connect(self.pushButtonRadio1Clicked)
-        self.pushButtonRadio2.clicked.connect(self.pushButtonRadio2Clicked)
-        self.pushButtonRadio3.clicked.connect(self.pushButtonRadio3Clicked)
+        self.pushButtonRadioPlay.clicked.connect(self.playRadio)
         self.t_stop = threading.Event()
-        self.defineRadioButtons()
+        self.defineRadioList()
         self.startRadio()
 
         self.uhr()
