@@ -8,11 +8,11 @@ import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QDate, QTime, QDateTime, Qt
 from PyQt5.QtWidgets import *
-from mainwindow import Ui_MainWindow
-import mainwindow
+from gui.mainwindow_ui import Ui_MainWindow
+#import mainwindow
 
-from radiowindow import Ui_RadioWindow
-import radiowindow
+from gui.radiowindow_ui import Ui_RadioWindow
+#import radiowindow
 
 
 import threading

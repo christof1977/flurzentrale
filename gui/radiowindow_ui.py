@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'radiowindow.ui'
+# Form implementation generated from reading ui file '/Users/sld/Documents/privat/projekte/fz_window/flurzentrale/gui/radiowindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.2
 #
