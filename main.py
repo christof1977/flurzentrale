@@ -11,6 +11,10 @@ from PyQt5.QtWidgets import *
 from mainwindow import Ui_MainWindow
 import mainwindow
 
+from radiowindow import Ui_RadioWindow
+import radiowindow
+
+
 import threading
 from threading import Thread
 import socket
@@ -39,9 +43,12 @@ radioUrls = ["http://webstream.gong971.de/gong971",
              "http://www.antenne.de/webradio/antenne.m3u",
              "http://www.rockantenne.de/webradio/rockantenne.aac.pls"
              ]
-radioNames = ["Gong",
+radioNames = ["Radio Gong",
               "StarFM",
               "Antenne Bayern",
+              "Rock Antenne",
+              "Rock Antenne",
+              "Rock Antenne",
               "Rock Antenne"
               ]
 
@@ -77,20 +84,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #    print ("Pressed On!")
 
     def hole_temp_db(self):
-        self.labelTab1Temp1.setText(str(self.db.read_one("WohnzimmerTemp"))+"°C")
-        self.labelTab1Temp2.setText(str(self.db.read_one("ArbeitszimmerTemp"))+"°C")
-        self.labelTab1Temp3.setText(str("--- °C"))
-        self.labelTab1Temp4.setText(str(self.db.read_one("TerrasseTemp"))+"°C")
+        pass
+#        self.labelTab1Temp1.setText(str(self.db.read_one("WohnzimmerTemp"))+"°C")
+#        self.labelTab1Temp2.setText(str(self.db.read_one("ArbeitszimmerTemp"))+"°C")
+#        self.labelTab1Temp3.setText(str("--- °C"))
+#        self.labelTab1Temp4.setText(str(self.db.read_one("TerrasseTemp"))+"°C")
         
-        self.labelTab2Temp1.setText(str(self.db.read_one("LeahTemp"))+"°C")
-        self.labelTab2Temp2.setText(str(self.db.read_one("FelixTemp"))+"°C")
-        self.labelTab2Temp3.setText(str(self.db.read_one("BadDGTemp"))+"°C")
-        self.labelTab2Temp4.setText(str("--- °C"))
+#        self.labelTab2Temp1.setText(str(self.db.read_one("LeahTemp"))+"°C")
+#        self.labelTab2Temp2.setText(str(self.db.read_one("FelixTemp"))+"°C")
+#        self.labelTab2Temp3.setText(str(self.db.read_one("BadDGTemp"))+"°C")
+#        self.labelTab2Temp4.setText(str("--- °C"))
 
-        self.labelTab4Temp1.setText(str(round(self.db.read_one("kVorlauf"),1))+"°C")
-        self.labelTab4Temp2.setText(str(round(self.db.read_one("kRuecklauf"),1))+"°C")
-        self.labelTab4Temp3.setText(str(round(self.db.read_one("ntVorlaufDGTemp"),1))+"°C")
-        self.labelTab4Temp4.setText(str(round(self.db.read_one("ntRuecklaufDGTemp"),1))+"°C")
+#        self.labelTab4Temp1.setText(str(round(self.db.read_one("kVorlauf"),1))+"°C")
+#        self.labelTab4Temp2.setText(str(round(self.db.read_one("kRuecklauf"),1))+"°C")
+#        self.labelTab4Temp3.setText(str(round(self.db.read_one("ntVorlaufDGTemp"),1))+"°C")
+#        self.labelTab4Temp4.setText(str(round(self.db.read_one("ntRuecklaufDGTemp"),1))+"°C")
 
     def update_temp(self):
         if(self.holetemp <= 5):
@@ -151,6 +159,36 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.labelStatus.setText("Ups ...")
 
+    def openRadio(self):
+        self.radio =  RadioWindow(self)
+        self.radio.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.radio.move(0, 0)
+        self.radio.show()
+
+
+    def __init__(self):
+        self.mysqluser = 'heizung'
+        self.mysqlpass = 'heizung'
+        self.mysqlserv = 'dose.fritz.box'
+        self.mysqldb   = 'heizung'
+        super(self.__class__, self).__init__()
+        self.setupUi(self) # gets defined in the UI file
+
+#        self.pushButtonTor.clicked.connect(self.pushButtonTorClicked)
+        self.pushButtonOpenRadio.clicked.connect(self.openRadio)
+
+        self.t_stop = threading.Event()
+
+        self.uhr()
+        self.operate = 0
+        self.db = mysqldose(self.mysqluser, self.mysqlpass, self.mysqlserv, self.mysqldb)
+        #self.mysql_success = False
+        self.db.start()
+        self.hole_temp_db()
+
+
+class RadioWindow(QMainWindow, Ui_RadioWindow):
+
 
     def defineRadioList(self):
         for radioName in radioNames:
@@ -162,6 +200,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             brush.setStyle(QtCore.Qt.NoBrush)
             item.setForeground(brush)
             self.listWidgetRadio.addItem(item)
+        self.listWidgetRadio.setCurrentRow(0)
 
     def startRadio(self):
         self.kodi = Kodi(osmd)
@@ -196,32 +235,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def volDown(self):
         remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_down")
 
-    def __init__(self):
-        self.mysqluser = 'heizung'
-        self.mysqlpass = 'heizung'
-        self.mysqlserv = 'dose.fritz.box'
-        self.mysqldb   = 'heizung'
-        super(self.__class__, self).__init__()
+    def home(self):
+        self.hide()
+        #self.close()
+
+    def __init__(self, parent):
+        super(RadioWindow, self).__init__(parent)
         self.setupUi(self) # gets defined in the UI file
-
-
-        self.pushButtonTor.clicked.connect(self.pushButtonTorClicked)
         self.pushButtonRadioStop.clicked.connect(self.stopRadio)
         self.pushButtonRadioPlay.clicked.connect(self.playRadio)
         self.pushButtonVolDown.clicked.connect(self.volDown)
         self.pushButtonVolUp.clicked.connect(self.volUp)
-        self.t_stop = threading.Event()
+        self.pushButtonHome.clicked.connect(self.home)
         self.defineRadioList()
         self.startRadio()
-
-        self.uhr()
-        self.operate = 0
-        self.db = mysqldose(self.mysqluser, self.mysqlpass, self.mysqlserv, self.mysqldb)
-        #self.mysql_success = False
-        self.db.start()
-        self.hole_temp_db()
-
-
 
 def main():
     app = QApplication(sys.argv)
