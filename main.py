@@ -196,7 +196,7 @@ class RadioWindow(QMainWindow, Ui_RadioWindow):
             font = QtGui.QFont()
             font.setPointSize(24)
             item.setFont(font)
-            brush = QtGui.QBrush(QtGui.QColor(162, 162, 162))
+            brush = QtGui.QBrush(QtGui.QColor(160, 160, 160))
             brush.setStyle(QtCore.Qt.NoBrush)
             item.setForeground(brush)
             self.listWidgetRadio.addItem(item)

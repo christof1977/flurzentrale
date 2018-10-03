@@ -324,20 +324,34 @@ class Ui_RadioWindow(object):
 "")
         self.pushButtonVolUp.setObjectName("pushButtonVolUp")
         self.listWidgetRadio = QtWidgets.QListWidget(self.centralWidget)
-        self.listWidgetRadio.setGeometry(QtCore.QRect(20, 50, 431, 161))
+        self.listWidgetRadio.setEnabled(True)
+        self.listWidgetRadio.setGeometry(QtCore.QRect(20, 50, 441, 161))
+        font = QtGui.QFont()
+        font.setPointSize(24)
+        self.listWidgetRadio.setFont(font)
         self.listWidgetRadio.setAutoFillBackground(False)
-        self.listWidgetRadio.setStyleSheet("QScrollBar:vertical {\n"
-"     border: 2px solid grey;\n"
-"     background: #32CC99;\n"
-"     width: 15px;\n"
-"     margin: 22px 0 22px 0;\n"
+        self.listWidgetRadio.setStyleSheet("QListWidget::item:selected {\n"
+"     color: rgb(100,100,100);\n"
+"     background-color: rgb(0,0,0);\n"
+"}\n"
+"QListWidget::item:selected {\n"
+"     color: rgb(255,255,255);\n"
+"     background-color: rgb(0,0,0);\n"
+"}\n"
+"QScrollBar:vertical {\n"
+"     border: 2px solid rgb(20,20,20);\n"
+"     background: rgb(0,0,0);\n"
+"     width: 25px;\n"
+"     margin: 0px 0 0px 0;\n"
 " }\n"
 " QScrollBar::handle:vertical {\n"
-"     background: white;\n"
+"     background: rgb(120,120,120);\n"
 "     min-height: 20px;\n"
 "}")
         self.listWidgetRadio.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.listWidgetRadio.setAutoScroll(True)
+        self.listWidgetRadio.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.listWidgetRadio.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectItems)
         self.listWidgetRadio.setObjectName("listWidgetRadio")
         self.labelTime_2 = QtWidgets.QLabel(self.centralWidget)
         self.labelTime_2.setGeometry(QtCore.QRect(20, 10, 71, 31))
@@ -347,12 +361,12 @@ class Ui_RadioWindow(object):
         self.labelTime_2.setStyleSheet("color: rgb(255, 255, 255);")
         self.labelTime_2.setObjectName("labelTime_2")
         self.pushButtonHome = QtWidgets.QPushButton(self.centralWidget)
-        self.pushButtonHome.setGeometry(QtCore.QRect(400, 0, 81, 51))
+        self.pushButtonHome.setGeometry(QtCore.QRect(436, 3, 41, 41))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -361,16 +375,16 @@ class Ui_RadioWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -379,16 +393,16 @@ class Ui_RadioWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -397,10 +411,10 @@ class Ui_RadioWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
+        brush = QtGui.QBrush(QtGui.QColor(0, 0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
         self.pushButtonHome.setPalette(palette)
@@ -410,22 +424,16 @@ class Ui_RadioWindow(object):
         self.pushButtonHome.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
         self.pushButtonHome.setStyleSheet("QPushButton\n"
 "{\n"
-"color: rgb(255, 255, 255);\n"
-"background-color: rgb(0, 0,0);\n"
-"border-color: rgb(40, 40, 40);\n"
-"border-width: 3px;        \n"
-"border-style: solid;\n"
-"border-radius: 4px;\n"
-"}\n"
-"QPushButton:pressed\n"
-"{\n"
-"background-color: rgb(40,40,40)\n"
+"background: transparent;\n"
+"border-image: url(gui/home.png);\n"
 "}\n"
 "")
+        self.pushButtonHome.setText("")
         self.pushButtonHome.setObjectName("pushButtonHome")
         RadioWindow.setCentralWidget(self.centralWidget)
 
         self.retranslateUi(RadioWindow)
+        self.listWidgetRadio.setCurrentRow(-1)
         QtCore.QMetaObject.connectSlotsByName(RadioWindow)
 
     def retranslateUi(self, RadioWindow):
@@ -435,6 +443,6 @@ class Ui_RadioWindow(object):
         self.pushButtonRadioStop.setText(_translate("RadioWindow", "Stop"))
         self.pushButtonVolDown.setText(_translate("RadioWindow", "-"))
         self.pushButtonVolUp.setText(_translate("RadioWindow", "+"))
+        self.listWidgetRadio.setSortingEnabled(False)
         self.labelTime_2.setText(_translate("RadioWindow", "<html><head/><body><p>Radio</p></body></html>"))
-        self.pushButtonHome.setText(_translate("RadioWindow", "Heim"))
 
