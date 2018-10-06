@@ -44,7 +44,9 @@ DISTFILES += \
     libby/logger.py \
     libby/mysqldose.py \
     libby/remoteAmpiUdp.py \
-    libby/tempsensors.py
+    libby/tempsensors.py \
+    main_kopie.py \
+    radio.py
 
 RESOURCES += \
     resoources.qrc

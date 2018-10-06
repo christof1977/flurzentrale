@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# From https://www.baldengineer.com/raspberry-pi-gui-tutorial.html 
+# From https://www.baldengineer.com/raspberry-pi-gui-tutorial.html
 # by James Lewis (@baldengineer)
 # Minimal python code to start PyQt5 GUI
 
@@ -9,10 +9,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QDate, QTime, QDateTime, Qt
 from PyQt5.QtWidgets import *
 from gui.mainwindow_ui import Ui_MainWindow
-#import mainwindow
+from radio import RadioWindow
 
-from gui.radiowindow_ui import Ui_RadioWindow
-#import radiowindow
 
 
 import threading
@@ -41,15 +39,25 @@ ampiPort = 5005
 radioUrls = ["http://webstream.gong971.de/gong971",
              "http://nbg.starfm.de/player/pls/nbg_pls_mp3.php.pls",
              "http://www.antenne.de/webradio/antenne.m3u",
-             "http://www.rockantenne.de/webradio/rockantenne.aac.pls"
+             "http://www.rockantenne.de/webradio/rockantenne.aac.pls",
+             "http://dg-br-http-fra-dtag-cdn.cast.addradio.de/br/br1/franken/mp3/128/stream.mp3?ar-distributor=f0a0",
+             "http://dg-br-http-fra-dtag-cdn.cast.addradio.de/br/br2/nord/mp3/128/stream.mp3?ar-distributor=f0a0",
+             "http://dg-br-http-fra-dtag-cdn.cast.addradio.de/br/brheimat/live/mp3/128/stream.mp3?ar-distributor=f0a0",
+             "http://8.38.78.173:8210/stream/1/",
+             "http://streaming.radio.co/saed08c46d/listen",
+             "http://webradio.radiof.de:8000/radiof"
              ]
+
 radioNames = ["Radio Gong",
               "StarFM",
               "Antenne Bayern",
               "Rock Antenne",
-              "Rock Antenne",
-              "Rock Antenne",
-              "Rock Antenne"
+              "Bayern 1",
+              "Bayern 2",
+              "BR Heimat",
+              "Audiophile Jazz",
+              "Radio BUH",
+              "Jazztime Nürnberg"
               ]
 
 
@@ -89,7 +97,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #        self.labelTab1Temp2.setText(str(self.db.read_one("ArbeitszimmerTemp"))+"°C")
 #        self.labelTab1Temp3.setText(str("--- °C"))
 #        self.labelTab1Temp4.setText(str(self.db.read_one("TerrasseTemp"))+"°C")
-        
+
 #        self.labelTab2Temp1.setText(str(self.db.read_one("LeahTemp"))+"°C")
 #        self.labelTab2Temp2.setText(str(self.db.read_one("FelixTemp"))+"°C")
 #        self.labelTab2Temp3.setText(str(self.db.read_one("BadDGTemp"))+"°C")
@@ -107,7 +115,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.hole_temp_db()
             self.holetemp = 0
 
-	
+
     def update_torstatus(self):
         if(self.schaunach == 5):
             json_cmd = '{"Aktion" : "Abfrage", "Parameter" : "Torstatus"}\n'
@@ -125,7 +133,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.schaunach += 1
 
     def _uhr(self):
-        while(not self.t_stop.is_set()): 
+        while(not self.t_stop.is_set()):
             now=datetime.datetime.now()
             if self.uhrzeitdp == 1:
                 #uhrzeit=str(now.hour)+" "+str(now.minute)
@@ -144,7 +152,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def uhr(self):
         self.uhrzeitdp = 1
-        self.schaunach = 0 
+        self.schaunach = 0
         self.holetemp = 0
         threading.Thread(target=self._uhr).start()
 
@@ -187,68 +195,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.hole_temp_db()
 
 
-class RadioWindow(QMainWindow, Ui_RadioWindow):
-
-
-    def defineRadioList(self):
-        for radioName in radioNames:
-            item = QtWidgets.QListWidgetItem(radioName)
-            font = QtGui.QFont()
-            font.setPointSize(24)
-            item.setFont(font)
-            brush = QtGui.QBrush(QtGui.QColor(160, 160, 160))
-            brush.setStyle(QtCore.Qt.NoBrush)
-            item.setForeground(brush)
-            self.listWidgetRadio.addItem(item)
-        self.listWidgetRadio.setCurrentRow(0)
-
-    def startRadio(self):
-        self.kodi = Kodi(osmd)
-        pass
-
-    def playRadio(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "Himbeer314")
-        radio2play = self.listWidgetRadio.currentItem().text()
-        try:
-            radioUrl = radioUrls[radioNames.index(radio2play)]
-        except:
-            print("No URL found!")
-        try:
-            ret = self.kodi.Player.Open({"item": {"file": radioUrl}})
-            #print(ret)
-            print("Starting", radioUrl)
-        except Exception as e:
-            print("Could not start radio!", radioUrl)
-            #print(str(e))
-
-    def stopRadio(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "Schneitzlberger")
-        try:
-            playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
-            result = self.kodi.Player.Stop({"playerid": playerid})
-        except:
-            pass
-
-    def volUp(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_up")
-
-    def volDown(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_down")
-
-    def home(self):
-        self.hide()
-        #self.close()
-
-    def __init__(self, parent):
-        super(RadioWindow, self).__init__(parent)
-        self.setupUi(self) # gets defined in the UI file
-        self.pushButtonRadioStop.clicked.connect(self.stopRadio)
-        self.pushButtonRadioPlay.clicked.connect(self.playRadio)
-        self.pushButtonVolDown.clicked.connect(self.volDown)
-        self.pushButtonVolUp.clicked.connect(self.volUp)
-        self.pushButtonHome.clicked.connect(self.home)
-        self.defineRadioList()
-        self.startRadio()
 
 def main():
     app = QApplication(sys.argv)
