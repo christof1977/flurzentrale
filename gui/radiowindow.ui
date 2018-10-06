@@ -20,9 +20,9 @@
    <widget class="QPushButton" name="pushButtonRadioPlay">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>350</x>
       <y>70</y>
-      <width>141</width>
+      <width>131</width>
       <height>51</height>
      </rect>
     </property>
@@ -229,9 +229,9 @@ background-color: rgb(40,40,40)
    <widget class="QPushButton" name="pushButtonRadioStop">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>350</x>
       <y>120</y>
-      <width>141</width>
+      <width>131</width>
       <height>51</height>
      </rect>
     </property>
@@ -438,9 +438,9 @@ background-color: rgb(40,40,40)
    <widget class="QPushButton" name="pushButtonVolDown">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>350</x>
       <y>220</y>
-      <width>141</width>
+      <width>131</width>
       <height>51</height>
      </rect>
     </property>
@@ -647,9 +647,9 @@ background-color: rgb(40,40,40)
    <widget class="QPushButton" name="pushButtonVolUp">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>350</x>
       <y>170</y>
-      <width>141</width>
+      <width>131</width>
       <height>51</height>
      </rect>
     </property>
@@ -859,9 +859,9 @@ background-color: rgb(40,40,40)
     </property>
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>50</y>
-      <width>301</width>
+      <width>321</width>
       <height>221</height>
      </rect>
     </property>
@@ -936,9 +936,9 @@ QScrollBar:vertical {
    <widget class="QPushButton" name="pushButtonHome">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>350</x>
       <y>0</y>
-      <width>141</width>
+      <width>131</width>
       <height>51</height>
      </rect>
     </property>
