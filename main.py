@@ -57,7 +57,7 @@ radioNames = ["Radio Gong",
               "BR Heimat",
               "Audiophile Jazz",
               "Radio BUH",
-              "Jazztime Nürnberg"
+              "Jazztime Nbg"
               ]
 
 
