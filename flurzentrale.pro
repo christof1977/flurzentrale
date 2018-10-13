@@ -46,7 +46,8 @@ DISTFILES += \
     libby/remoteAmpiUdp.py \
     libby/tempsensors.py \
     main_kopie.py \
-    radio.py
+    radio.py \
+    stations.py
 
 RESOURCES += \
     resoources.qrc

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
-# From https://www.baldengineer.com/raspberry-pi-gui-tutorial.html
-# by James Lewis (@baldengineer)
-# Minimal python code to start PyQt5 GUI
+
+from os import path, getenv
 
 import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QDate, QTime, QDateTime, Qt
 from PyQt5.QtWidgets import *
-from gui.mainwindow_ui import Ui_MainWindow
+from PyQt5.uic import loadUiType
+
+
 from radio import RadioWindow
 
 
@@ -22,43 +23,16 @@ import syslog
 import datetime
 import json
 from kodijson import Kodi
-from libby import remoteAmpiUdp
+#from libby import remoteAmpiUdp
 
-#import mysql.connector
 from libby import mysqldose
 from libby.mysqldose import mysqldose
 
 garagn_tcp_addr = 'garagn.fritz.box'
 garagn_tcp_port = 80
 buffer_size = 1024
-osmd  = "http://osmd.fritz.box/jsonrpc"
-ampi = "osmd.fritz.box"
-ampiPort = 5005
-
-
-radioUrls = ["http://webstream.gong971.de/gong971",
-             "http://nbg.starfm.de/player/pls/nbg_pls_mp3.php.pls",
-             "http://www.antenne.de/webradio/antenne.m3u",
-             "http://www.rockantenne.de/webradio/rockantenne.aac.pls",
-             "http://dg-br-http-fra-dtag-cdn.cast.addradio.de/br/br1/franken/mp3/128/stream.mp3?ar-distributor=f0a0",
-             "http://dg-br-http-fra-dtag-cdn.cast.addradio.de/br/br2/nord/mp3/128/stream.mp3?ar-distributor=f0a0",
-             "http://dg-br-http-fra-dtag-cdn.cast.addradio.de/br/brheimat/live/mp3/128/stream.mp3?ar-distributor=f0a0",
-             "http://8.38.78.173:8210/stream/1/",
-             "http://streaming.radio.co/saed08c46d/listen",
-             "http://webradio.radiof.de:8000/radiof"
-             ]
-
-radioNames = ["Radio Gong",
-              "StarFM",
-              "Antenne Bayern",
-              "Rock Antenne",
-              "Bayern 1",
-              "Bayern 2",
-              "BR Heimat",
-              "Audiophile Jazz",
-              "Radio BUH",
-              "Jazztime Nbg"
-              ]
+radioConfigW  = ["Wohnzimmer", "http://osmd.fritz.box/jsonrpc", "osmd.fritz.box", 5005]
+radioConfigA  = ["Arbeitszimmmer", "http://osme.fritz.box/jsonrpc", None, None]
 
 
 
@@ -84,7 +58,11 @@ def json_dec(json_string):
     return out
 
 
-class MainWindow(QMainWindow, Ui_MainWindow):
+
+MainWindowUI, MainWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/mainwindow.ui'))
+
+
+class MainWindow(MainWindowBase, MainWindowUI):
 # access variables inside of the UI's file
 
 ### functions for the buttons to call
@@ -92,7 +70,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 #    print ("Pressed On!")
 
     def hole_temp_db(self):
-        pass
+        self.labelTempDraussen.setText(str(self.db.read_one("OekoAussenTemp"))+"°C")
 #        self.labelTab1Temp1.setText(str(self.db.read_one("WohnzimmerTemp"))+"°C")
 #        self.labelTab1Temp2.setText(str(self.db.read_one("ArbeitszimmerTemp"))+"°C")
 #        self.labelTab1Temp3.setText(str("--- °C"))
@@ -154,7 +132,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.uhrzeitdp = 1
         self.schaunach = 0
         self.holetemp = 0
-        threading.Thread(target=self._uhr).start()
+        uhrTh = threading.Thread(target=self._uhr)
+        uhrTh.setDaemon(True)
+        uhrTh.start()
 
     def pushButtonTorClicked(self):
         #time.sleep(.5)
@@ -166,6 +146,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.labelStatus.setText("Bassd")
         else:
             self.labelStatus.setText("Ups ...")
+
+    def openRadioA(self):
+        self.radioConfig = radioConfigA
+        self.openRadio()
+
+    def openRadioW(self):
+        self.radioConfig = radioConfigW
+        self.openRadio()
 
     def openRadio(self):
         self.radio =  RadioWindow(self)
@@ -183,7 +171,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self) # gets defined in the UI file
 
 #        self.pushButtonTor.clicked.connect(self.pushButtonTorClicked)
-        self.pushButtonOpenRadio.clicked.connect(self.openRadio)
+        self.pushButtonOpenRadioW.clicked.connect(self.openRadioW)
+        self.pushButtonOpenRadioA.clicked.connect(self.openRadioA)
 
         self.t_stop = threading.Event()
 
@@ -202,7 +191,9 @@ def main():
     anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
     anzeige.move(0, 0)
     anzeige.show()
-    sys.exit(app.exec_())
+    app.exec_()
+    #sys.exit(app.exec_())
+    #sys.exit()
 
 if __name__ == "__main__":
     main() 

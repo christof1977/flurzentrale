@@ -912,12 +912,12 @@ QScrollBar:vertical {
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="labelTime_2">
+   <widget class="QLabel" name="labelTitle">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>71</width>
+      <width>321</width>
       <height>31</height>
      </rect>
     </property>

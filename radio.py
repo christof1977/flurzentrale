@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
+from os import path, getenv
+import time
 
 import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QDate, QTime, QDateTime, Qt
 from PyQt5.QtWidgets import *
+from PyQt5.uic import loadUiType
 
-from gui.radiowindow_ui import Ui_RadioWindow
+#from gui.radiowindow_ui import Ui_RadioWindow
 #import radiowindow
 
 
@@ -21,34 +24,12 @@ import json
 from kodijson import Kodi
 from libby import remoteAmpiUdp
 
+from stations import radioStations
 
-osmd  = "http://osmd.fritz.box/jsonrpc"
-ampi = "osmd.fritz.box"
-ampiPort = 5005
+#osmd  = "http://osmd.fritz.box/jsonrpc"
+#ampi = "osmd.fritz.box"
+#ampiPort = 5005
 
-
-radioUrls = ["http://webstream.gong971.de/gong971",
-             "http://nbg.starfm.de/player/pls/nbg_pls_mp3.php.pls",
-             "http://www.antenne.de/webradio/antenne.m3u",
-             "http://www.rockantenne.de/webradio/rockantenne.aac.pls",
-             "http://dg-br-http-fra-dtag-cdn.cast.addradio.de/br/br1/franken/mp3/128/stream.mp3?ar-distributor=f0a0",
-             "http://dg-br-http-fra-dtag-cdn.cast.addradio.de/br/br2/nord/mp3/128/stream.mp3?ar-distributor=f0a0",
-             "http://dg-br-http-fra-dtag-cdn.cast.addradio.de/br/brheimat/live/mp3/128/stream.mp3?ar-distributor=f0a0",
-             "http://8.38.78.173:8210/stream/1/",
-             "http://streaming.radio.co/saed08c46d/listen",
-             "http://webradio.radiof.de:8000/radiof"
-             ]
-radioNames = ["Radio Gong",
-              "StarFM",
-              "Antenne Bayern",
-              "Rock Antenne",
-              "Bayern 1",
-              "Bayern 2",
-              "BR Heimat",
-              "Audiophile Jazz",
-              "Radio BUH",
-              "Jazztime Nürnberg"
-              ]
 
 
 
@@ -73,11 +54,13 @@ def json_dec(json_string):
         #print("Json-Fehler")
     return out
 
+RadioWindowUI, RadioWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/radiowindow.ui'))
 
 
-class RadioWindow(QMainWindow, Ui_RadioWindow):
+class RadioWindow(RadioWindowBase, RadioWindowUI):
 
     def __init__(self, parent):
+        self.radioConfig = parent.radioConfig
         super(RadioWindow, self).__init__(parent)
         self.setupUi(self) # gets defined in the UI file
         self.pushButtonRadioStop.clicked.connect(self.stopRadio)
@@ -86,11 +69,10 @@ class RadioWindow(QMainWindow, Ui_RadioWindow):
         self.pushButtonVolUp.clicked.connect(self.volUp)
         self.pushButtonHome.clicked.connect(self.home)
         self.defineRadioList()
-        self.startRadio()
-
+        self.startRadio(parent)
 
     def defineRadioList(self):
-        for radioName in radioNames:
+        for radioName in radioStations:
             item = QtWidgets.QListWidgetItem(radioName)
             font = QtGui.QFont()
             font.setPointSize(24)
@@ -101,15 +83,25 @@ class RadioWindow(QMainWindow, Ui_RadioWindow):
             self.listWidgetRadio.addItem(item)
         self.listWidgetRadio.setCurrentRow(0)
 
-    def startRadio(self):
-        self.kodi = Kodi(osmd)
-        pass
+    def startRadio(self, parent):
+        #print(self.radioConfig[0])
+        #self.kodi = Kodi(osmd)
+        try:
+            self.kodi = Kodi(self.radioConfig[1])
+            print(self.kodi.JSONRPC.Ping())
+            self.labelTitle.setText("Radio "+self.radioConfig[0])
+        except:
+            print("Kein Kodi da!")
+            self.labelTitle.setText("Fehler: "+self.radioConfig[0])
+            time.sleep(1)
+            parent.labelStatus.setText("Ups ...")
 
     def playRadio(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "Himbeer314")
+        if(self.radioConfig[2]!=None):
+            remoteAmpiUdp.sende(None, ampi, ampiPort, "Himbeer314")
         radio2play = self.listWidgetRadio.currentItem().text()
         try:
-            radioUrl = radioUrls[radioNames.index(radio2play)]
+            radioUrl = radioStations[radio2play]
         except:
             print("No URL found!")
         try:
@@ -121,7 +113,9 @@ class RadioWindow(QMainWindow, Ui_RadioWindow):
             #print(str(e))
 
     def stopRadio(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "Schneitzlberger")
+        if(self.radioConfig[2]!=None):
+            print("mit Verstärker")
+            remoteAmpiUdp.sende(None, ampi, ampiPort, "Schneitzlberger")
         try:
             playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
             result = self.kodi.Player.Stop({"playerid": playerid})
@@ -129,14 +123,16 @@ class RadioWindow(QMainWindow, Ui_RadioWindow):
             pass
 
     def volUp(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_up")
+        if(self.radioConfig[2]!=None):
+            remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_up")
 
     def volDown(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_down")
+        if(self.radioConfig[2]!=None):
+            remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_down")
 
     def home(self):
         self.hide()
-        #self.close()
+        self.close()
 
 
 
