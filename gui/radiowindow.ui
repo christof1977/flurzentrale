@@ -867,7 +867,7 @@ background-color: rgb(40,40,40)
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>18</pointsize>
      </font>
     </property>
     <property name="autoFillBackground">
