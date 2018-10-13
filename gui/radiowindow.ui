@@ -200,7 +200,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>25</pointsize>
+      <pointsize>20</pointsize>
      </font>
     </property>
     <property name="cursor">
@@ -409,7 +409,7 @@ background-color: rgb(40,40,40)
     </property>
     <property name="font">
      <font>
-      <pointsize>25</pointsize>
+      <pointsize>20</pointsize>
      </font>
     </property>
     <property name="cursor">
@@ -618,7 +618,7 @@ background-color: rgb(40,40,40)
     </property>
     <property name="font">
      <font>
-      <pointsize>25</pointsize>
+      <pointsize>20</pointsize>
      </font>
     </property>
     <property name="cursor">
@@ -827,7 +827,7 @@ background-color: rgb(40,40,40)
     </property>
     <property name="font">
      <font>
-      <pointsize>25</pointsize>
+      <pointsize>20</pointsize>
      </font>
     </property>
     <property name="cursor">
@@ -867,7 +867,7 @@ background-color: rgb(40,40,40)
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
+      <pointsize>20</pointsize>
      </font>
     </property>
     <property name="autoFillBackground">
@@ -1116,7 +1116,7 @@ QScrollBar:vertical {
     </property>
     <property name="font">
      <font>
-      <pointsize>25</pointsize>
+      <pointsize>20</pointsize>
      </font>
     </property>
     <property name="cursor">
