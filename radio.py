@@ -84,8 +84,6 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         self.listWidgetRadio.setCurrentRow(0)
 
     def startRadio(self, parent):
-        #print(self.radioConfig[0])
-        #self.kodi = Kodi(osmd)
         try:
             self.kodi = Kodi(self.radioConfig[1])
             print(self.kodi.JSONRPC.Ping())
@@ -98,7 +96,7 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
 
     def playRadio(self):
         if(self.radioConfig[2]!=None):
-            remoteAmpiUdp.sende(None, ampi, ampiPort, "Himbeer314")
+            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "Himbeer314")
         radio2play = self.listWidgetRadio.currentItem().text()
         try:
             radioUrl = radioStations[radio2play]
@@ -115,7 +113,7 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
     def stopRadio(self):
         if(self.radioConfig[2]!=None):
             print("mit Verstärker")
-            remoteAmpiUdp.sende(None, ampi, ampiPort, "Schneitzlberger")
+            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "Schneitzlberger")
         try:
             playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
             result = self.kodi.Player.Stop({"playerid": playerid})
@@ -124,11 +122,11 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
 
     def volUp(self):
         if(self.radioConfig[2]!=None):
-            remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_up")
+            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "vol_up")
 
     def volDown(self):
         if(self.radioConfig[2]!=None):
-            remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_down")
+            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "vol_down")
 
     def home(self):
         self.hide()
