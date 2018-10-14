@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from os import path, getenv
-import time
 
 import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -9,9 +8,8 @@ from PyQt5.QtCore import QDate, QTime, QDateTime, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
 
-#from gui.radiowindow_ui import Ui_RadioWindow
-#import radiowindow
-
+#import os
+import subprocess
 
 import threading
 from threading import Thread
@@ -26,33 +24,6 @@ from libby import remoteAmpiUdp
 
 from stations import radioStations
 
-#osmd  = "http://osmd.fritz.box/jsonrpc"
-#ampi = "osmd.fritz.box"
-#ampiPort = 5005
-
-
-
-
-def sende(tcp_sock, tcp_addr, tcp_port, json_cmd):
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((tcp_addr, tcp_port))
-        s.send(json_cmd.encode())
-        data = s.recv(buffer_size, socket.MSG_WAITALL)
-        return data.decode()
-        s.close()
-    except Exception as e:
-        #print("Verbinungsfehler")
-        return '{"Aktion" : "Fehler", "Parameter" : "Verbindung"}\n'
-
-def json_dec(json_string):
-    try:
-        out = json.loads(json_string)
-    except:
-        json_string = '{"Aktion" : "Fehler", "Parameter" : "JSON"}\n'
-        out = json.loads(json_string)
-        #print("Json-Fehler")
-    return out
 
 RadioWindowUI, RadioWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/radiowindow.ui'))
 
@@ -60,6 +31,7 @@ RadioWindowUI, RadioWindowBase = loadUiType(path.join(path.dirname(path.abspath(
 class RadioWindow(RadioWindowBase, RadioWindowUI):
 
     def __init__(self, parent):
+        self.status = 0
         self.radioConfig = parent.radioConfig
         super(RadioWindow, self).__init__(parent)
         self.setupUi(self) # gets defined in the UI file
@@ -84,15 +56,27 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         self.listWidgetRadio.setCurrentRow(0)
 
     def startRadio(self, parent):
-        try:
-            self.kodi = Kodi(self.radioConfig[1])
-            print(self.kodi.JSONRPC.Ping())
-            self.labelTitle.setText("Radio "+self.radioConfig[0])
-        except:
-            print("Kein Kodi da!")
-            self.labelTitle.setText("Fehler: "+self.radioConfig[0])
-            time.sleep(1)
-            parent.labelStatus.setText("Ups ...")
+        p = subprocess.Popen(['ping',self.radioConfig[1],'-c','1',"-W","2"])
+        p.wait()
+        if(p.poll() == 0):
+            try:
+                self.kodi = Kodi("http://"+self.radioConfig[1]+"/jsonrpc")
+                print(self.kodi.JSONRPC.Ping())
+                self.labelTitle.setText("Radio "+self.radioConfig[0])
+            except:
+                print("Kein Kodi da!")
+                self.labelTitle.setText("Fehler: "+self.radioConfig[0])
+                time.sleep(1)
+                parent.labelStatus.setText("Nix Radio!")
+                self.status = 1
+        else:
+            parent.labelStatus.setText("Nix Radio!")
+            self.status = 1
+
+    def checkStatus(self):
+        #print(self.status)
+        if(self.status):
+            self.home()
 
     def playRadio(self):
         if(self.radioConfig[2]!=None):
@@ -104,8 +88,8 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
             print("No URL found!")
         try:
             ret = self.kodi.Player.Open({"item": {"file": radioUrl}})
-            #print(ret)
             print("Starting", radioUrl)
+            #parent.labelStatus.setText(radio2play)
         except Exception as e:
             print("Could not start radio!", radioUrl)
             #print(str(e))
@@ -117,16 +101,19 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         try:
             playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
             result = self.kodi.Player.Stop({"playerid": playerid})
+            #parent.labelStatus.setText("Radio aus")
         except:
             pass
 
     def volUp(self):
         if(self.radioConfig[2]!=None):
             remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "vol_up")
+            #parent.labelStatus.setText("Lauter")
 
     def volDown(self):
         if(self.radioConfig[2]!=None):
             remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "vol_down")
+            #parent.labelStatus.setText("Leiser")
 
     def home(self):
         self.hide()

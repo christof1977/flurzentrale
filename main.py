@@ -9,10 +9,7 @@ from PyQt5.QtCore import QDate, QTime, QDateTime, Qt
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
 
-
 from radio import RadioWindow
-
-
 
 import threading
 from threading import Thread
@@ -23,7 +20,6 @@ import syslog
 import datetime
 import json
 from kodijson import Kodi
-#from libby import remoteAmpiUdp
 
 from libby import mysqldose
 from libby.mysqldose import mysqldose
@@ -31,8 +27,8 @@ from libby.mysqldose import mysqldose
 garagn_tcp_addr = 'garagn.fritz.box'
 garagn_tcp_port = 80
 buffer_size = 1024
-radioConfigW  = ["Wohnzimmer", "http://osmd.fritz.box/jsonrpc", "osmd.fritz.box", 5005]
-radioConfigA  = ["Arbeitszimmmer", "http://osme.fritz.box/jsonrpc", None, None]
+radioConfigW  = ["Wohnzimmer", "osmd.fritz.box", "osmd.fritz.box", 5005]
+radioConfigA  = ["Arbeitszimmmer", "osme.fritz.box", None, None]
 
 
 
@@ -58,16 +54,10 @@ def json_dec(json_string):
     return out
 
 
-
 MainWindowUI, MainWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/mainwindow.ui'))
 
 
 class MainWindow(MainWindowBase, MainWindowUI):
-# access variables inside of the UI's file
-
-### functions for the buttons to call
-#def pressedOnButton(self):
-#    print ("Pressed On!")
 
     def hole_temp_db(self):
         self.labelTempDraussen.setText(str(self.db.read_one("OekoAussenTemp"))+"°C")
@@ -136,7 +126,8 @@ class MainWindow(MainWindowBase, MainWindowUI):
         uhrTh.setDaemon(True)
         uhrTh.start()
 
-    def pushButtonTorClicked(self):
+    def torAufZu(self):
+        print("Tor")
         #time.sleep(.5)
         json_cmd = '{"Aktion" : "Kommando", "Parameter" : "TorAufZu"}\n'
         self.labelStatus.setText("Warte kurz")
@@ -160,6 +151,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.radio.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.radio.move(0, 0)
         self.radio.show()
+        self.radio.checkStatus()
 
 
     def __init__(self):
@@ -170,7 +162,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
         super(self.__class__, self).__init__()
         self.setupUi(self) # gets defined in the UI file
 
-#        self.pushButtonTor.clicked.connect(self.pushButtonTorClicked)
+        self.pushButtonTor.clicked.connect(self.torAufZu)
         self.pushButtonOpenRadioW.clicked.connect(self.openRadioW)
         self.pushButtonOpenRadioA.clicked.connect(self.openRadioA)
 

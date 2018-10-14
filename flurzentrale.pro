@@ -25,7 +25,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.py
+        main.py \
+        radio.py \
+        stations.py
 
 FORMS += \
         mainwindow.ui \
@@ -45,9 +47,6 @@ DISTFILES += \
     libby/mysqldose.py \
     libby/remoteAmpiUdp.py \
     libby/tempsensors.py \
-    main_kopie.py \
-    radio.py \
-    stations.py
 
 RESOURCES += \
     resoources.qrc
