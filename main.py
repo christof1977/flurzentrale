@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
-# From https://www.baldengineer.com/raspberry-pi-gui-tutorial.html 
-# by James Lewis (@baldengineer)
-# Minimal python code to start PyQt5 GUI
+
+from os import path, getenv
 
 import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QDate, QTime, QDateTime, Qt
 from PyQt5.QtWidgets import *
-from mainwindow import Ui_MainWindow
-import mainwindow
+from PyQt5.uic import loadUiType
+
+from radio import RadioWindow
 
 import threading
 from threading import Thread
@@ -20,30 +20,15 @@ import syslog
 import datetime
 import json
 from kodijson import Kodi
-from libby import remoteAmpiUdp
 
-#import mysql.connector
 from libby import mysqldose
 from libby.mysqldose import mysqldose
 
 garagn_tcp_addr = 'garagn.fritz.box'
 garagn_tcp_port = 80
 buffer_size = 1024
-osmd  = "http://osmd.fritz.box/jsonrpc"
-ampi = "osmd.fritz.box"
-ampiPort = 5005
-
-
-radioUrls = ["http://webstream.gong971.de/gong971",
-             "http://nbg.starfm.de/player/pls/nbg_pls_mp3.php.pls",
-             "http://www.antenne.de/webradio/antenne.m3u",
-             "http://www.rockantenne.de/webradio/rockantenne.aac.pls"
-             ]
-radioNames = ["Gong",
-              "StarFM",
-              "Antenne Bayern",
-              "Rock Antenne"
-              ]
+radioConfigW  = ["Wohnzimmer", "osmd.fritz.box", "osmd.fritz.box", 5005]
+radioConfigA  = ["Arbeitszimmmer", "osme.fritz.box", None, None]
 
 
 
@@ -69,28 +54,27 @@ def json_dec(json_string):
     return out
 
 
-class MainWindow(QMainWindow, Ui_MainWindow):
-# access variables inside of the UI's file
+MainWindowUI, MainWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/mainwindow.ui'))
 
-### functions for the buttons to call
-#def pressedOnButton(self):
-#    print ("Pressed On!")
+
+class MainWindow(MainWindowBase, MainWindowUI):
 
     def hole_temp_db(self):
-        self.labelTab1Temp1.setText(str(self.db.read_one("WohnzimmerTemp"))+"°C")
-        self.labelTab1Temp2.setText(str(self.db.read_one("ArbeitszimmerTemp"))+"°C")
-        self.labelTab1Temp3.setText(str("--- °C"))
-        self.labelTab1Temp4.setText(str(self.db.read_one("TerrasseTemp"))+"°C")
-        
-        self.labelTab2Temp1.setText(str(self.db.read_one("LeahTemp"))+"°C")
-        self.labelTab2Temp2.setText(str(self.db.read_one("FelixTemp"))+"°C")
-        self.labelTab2Temp3.setText(str(self.db.read_one("BadDGTemp"))+"°C")
-        self.labelTab2Temp4.setText(str("--- °C"))
+        self.labelTempDraussen.setText(str(self.db.read_one("OekoAussenTemp"))+"°C")
+#        self.labelTab1Temp1.setText(str(self.db.read_one("WohnzimmerTemp"))+"°C")
+#        self.labelTab1Temp2.setText(str(self.db.read_one("ArbeitszimmerTemp"))+"°C")
+#        self.labelTab1Temp3.setText(str("--- °C"))
+#        self.labelTab1Temp4.setText(str(self.db.read_one("TerrasseTemp"))+"°C")
 
-        self.labelTab4Temp1.setText(str(round(self.db.read_one("kVorlauf"),1))+"°C")
-        self.labelTab4Temp2.setText(str(round(self.db.read_one("kRuecklauf"),1))+"°C")
-        self.labelTab4Temp3.setText(str(round(self.db.read_one("ntVorlaufDGTemp"),1))+"°C")
-        self.labelTab4Temp4.setText(str(round(self.db.read_one("ntRuecklaufDGTemp"),1))+"°C")
+#        self.labelTab2Temp1.setText(str(self.db.read_one("LeahTemp"))+"°C")
+#        self.labelTab2Temp2.setText(str(self.db.read_one("FelixTemp"))+"°C")
+#        self.labelTab2Temp3.setText(str(self.db.read_one("BadDGTemp"))+"°C")
+#        self.labelTab2Temp4.setText(str("--- °C"))
+
+#        self.labelTab4Temp1.setText(str(round(self.db.read_one("kVorlauf"),1))+"°C")
+#        self.labelTab4Temp2.setText(str(round(self.db.read_one("kRuecklauf"),1))+"°C")
+#        self.labelTab4Temp3.setText(str(round(self.db.read_one("ntVorlaufDGTemp"),1))+"°C")
+#        self.labelTab4Temp4.setText(str(round(self.db.read_one("ntRuecklaufDGTemp"),1))+"°C")
 
     def update_temp(self):
         if(self.holetemp <= 5):
@@ -99,7 +83,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.hole_temp_db()
             self.holetemp = 0
 
-	
+
     def update_torstatus(self):
         if(self.schaunach == 5):
             json_cmd = '{"Aktion" : "Abfrage", "Parameter" : "Torstatus"}\n'
@@ -117,7 +101,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.schaunach += 1
 
     def _uhr(self):
-        while(not self.t_stop.is_set()): 
+        while(not self.t_stop.is_set()):
             now=datetime.datetime.now()
             if self.uhrzeitdp == 1:
                 #uhrzeit=str(now.hour)+" "+str(now.minute)
@@ -136,11 +120,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def uhr(self):
         self.uhrzeitdp = 1
-        self.schaunach = 0 
+        self.schaunach = 0
         self.holetemp = 0
-        threading.Thread(target=self._uhr).start()
+        uhrTh = threading.Thread(target=self._uhr)
+        uhrTh.setDaemon(True)
+        uhrTh.start()
 
-    def pushButtonTorClicked(self):
+    def torAufZu(self):
+        print("Tor")
         #time.sleep(.5)
         json_cmd = '{"Aktion" : "Kommando", "Parameter" : "TorAufZu"}\n'
         self.labelStatus.setText("Warte kurz")
@@ -151,50 +138,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             self.labelStatus.setText("Ups ...")
 
+    def openRadioA(self):
+        self.radioConfig = radioConfigA
+        self.openRadio()
 
-    def defineRadioList(self):
-        for radioName in radioNames:
-            item = QtWidgets.QListWidgetItem(radioName)
-            font = QtGui.QFont()
-            font.setPointSize(24)
-            item.setFont(font)
-            brush = QtGui.QBrush(QtGui.QColor(162, 162, 162))
-            brush.setStyle(QtCore.Qt.NoBrush)
-            item.setForeground(brush)
-            self.listWidgetRadio.addItem(item)
+    def openRadioW(self):
+        self.radioConfig = radioConfigW
+        self.openRadio()
 
-    def startRadio(self):
-        self.kodi = Kodi(osmd)
-        pass
+    def openRadio(self):
+        self.radio =  RadioWindow(self)
+        self.radio.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.radio.move(0, 0)
+        self.radio.show()
+        self.radio.checkStatus()
 
-    def playRadio(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "Himbeer314")
-        radio2play = self.listWidgetRadio.currentItem().text()
-        try:
-            radioUrl = radioUrls[radioNames.index(radio2play)]
-        except:
-            print("No URL found!")
-        try:
-            ret = self.kodi.Player.Open({"item": {"file": radioUrl}})
-            #print(ret)
-            print("Starting", radioUrl)
-        except Exception as e:
-            print("Could not start radio!", radioUrl)
-            #print(str(e))
-
-    def stopRadio(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "Schneitzlberger")
-        try:
-            playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
-            result = self.kodi.Player.Stop({"playerid": playerid})
-        except:
-            pass
-
-    def volUp(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_up")
-
-    def volDown(self):
-        remoteAmpiUdp.sende(None, ampi, ampiPort, "vol_down")
 
     def __init__(self):
         self.mysqluser = 'heizung'
@@ -204,15 +162,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         super(self.__class__, self).__init__()
         self.setupUi(self) # gets defined in the UI file
 
+        self.pushButtonTor.clicked.connect(self.torAufZu)
+        self.pushButtonOpenRadioW.clicked.connect(self.openRadioW)
+        self.pushButtonOpenRadioA.clicked.connect(self.openRadioA)
 
-        self.pushButtonTor.clicked.connect(self.pushButtonTorClicked)
-        self.pushButtonRadioStop.clicked.connect(self.stopRadio)
-        self.pushButtonRadioPlay.clicked.connect(self.playRadio)
-        self.pushButtonVolDown.clicked.connect(self.volDown)
-        self.pushButtonVolUp.clicked.connect(self.volUp)
         self.t_stop = threading.Event()
-        self.defineRadioList()
-        self.startRadio()
 
         self.uhr()
         self.operate = 0
@@ -229,7 +183,9 @@ def main():
     anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
     anzeige.move(0, 0)
     anzeige.show()
-    sys.exit(app.exec_())
+    app.exec_()
+    #sys.exit(app.exec_())
+    #sys.exit()
 
 if __name__ == "__main__":
     main() 
