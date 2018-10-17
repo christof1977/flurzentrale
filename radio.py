@@ -4,11 +4,10 @@ from os import path, getenv
 
 import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QDate, QTime, QDateTime, Qt
+from PyQt5.QtCore import QDate, QTime, QDateTime, Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
 
-#import os
 import subprocess
 
 import threading
@@ -29,6 +28,9 @@ RadioWindowUI, RadioWindowBase = loadUiType(path.join(path.dirname(path.abspath(
 
 
 class RadioWindow(RadioWindowBase, RadioWindowUI):
+
+    statusSignal = pyqtSignal('QString') # erstelle Signal, um Status in Mainwindiw zu aktualisieren
+
 
     def __init__(self, parent):
         self.status = 0
@@ -58,7 +60,7 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
     def startRadio(self, parent):
         p = subprocess.Popen(['ping',self.radioConfig[1],'-c','1',"-W","2"])
         p.wait()
-        if(p.poll() == 0):
+        if(p.poll() == 0): #Hier gehts weiter, wenn ping erfolgreich war
             try:
                 self.kodi = Kodi("http://"+self.radioConfig[1]+"/jsonrpc")
                 print(self.kodi.JSONRPC.Ping())
@@ -66,11 +68,11 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
             except:
                 print("Kein Kodi da!")
                 self.labelTitle.setText("Fehler: "+self.radioConfig[0])
-                time.sleep(1)
-                parent.labelStatus.setText("Nix Radio!")
+                #time.sleep(1)
+                self.statusSignal.emit("Nix Radio!")
                 self.status = 1
-        else:
-            parent.labelStatus.setText("Nix Radio!")
+        else: # Hier lang ohne erfolgreichen ping
+            self.statusSignal.emit("Nix Radio!")
             self.status = 1
 
     def checkStatus(self):
@@ -79,17 +81,19 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
             self.home()
 
     def playRadio(self):
-        if(self.radioConfig[2]!=None):
-            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "Himbeer314")
+        #if(self.radioConfig[2] != None):
+        #    remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "Himbeer314")
         radio2play = self.listWidgetRadio.currentItem().text()
+        print(radio2play)
         try:
             radioUrl = radioStations[radio2play]
         except:
             print("No URL found!")
+        print(radioUrl)
         try:
             ret = self.kodi.Player.Open({"item": {"file": radioUrl}})
             print("Starting", radioUrl)
-            #parent.labelStatus.setText(radio2play)
+            self.statusSignal.emit(radio2play)
         except Exception as e:
             print("Could not start radio!", radioUrl)
             #print(str(e))
@@ -101,23 +105,23 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         try:
             playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
             result = self.kodi.Player.Stop({"playerid": playerid})
-            #parent.labelStatus.setText("Radio aus")
+            self.statusSignal.emit("Aus is!")
         except:
             pass
 
     def volUp(self):
         if(self.radioConfig[2]!=None):
             remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "vol_up")
-            #parent.labelStatus.setText("Lauter")
+            self.statusSignal.emit("Lauter")
 
     def volDown(self):
         if(self.radioConfig[2]!=None):
             remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "vol_down")
-            #parent.labelStatus.setText("Leiser")
+            self.statusSignal.emit("Leiser")
 
     def home(self):
         self.hide()
-        self.close()
+        #self.close()
 
 
 
