@@ -194,8 +194,8 @@ class MainWindow(MainWindowBase, MainWindowUI):
 def main():
     app = QApplication(sys.argv)
     anzeige = MainWindow()
-    #anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-    #anzeige.move(0, 0)
+    anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+    anzeige.move(0, 0)
     anzeige.show()
     app.exec_()
     #sys.exit(app.exec_())
