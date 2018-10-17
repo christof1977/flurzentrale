@@ -5,7 +5,7 @@ from os import path, getenv
 
 import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QDate, QTime, QDateTime, Qt
+from PyQt5.QtCore import QDate, QTime, QDateTime, Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
 
@@ -59,6 +59,11 @@ MainWindowUI, MainWindowBase = loadUiType(path.join(path.dirname(path.abspath(__
 
 class MainWindow(MainWindowBase, MainWindowUI):
 
+    @pyqtSlot('QString')
+    def setStatus(self, msg):
+        self.labelStatusTime = 0
+        self.labelStatus.setText(msg)
+
     def hole_temp_db(self):
         self.labelTempDraussen.setText(str(self.db.read_one("OekoAussenTemp"))+"°C")
 #        self.labelTab1Temp1.setText(str(self.db.read_one("WohnzimmerTemp"))+"°C")
@@ -111,6 +116,13 @@ class MainWindow(MainWindowBase, MainWindowUI):
                 #uhrzeit=str(now.hour)+":"+str(now.minute)
                 uhrzeit="{0:0>2}".format(now.hour)+":"+"{0:0>2}".format(now.minute)
                 self.uhrzeitdp = 1
+
+            # Reset labelStatus if text display for 3 seconds:
+            if(self.labelStatusTime <= 2):
+                self.labelStatusTime += 1
+            else:
+                self.labelStatus.setText("Dumdidum ...")
+
             self.labelTime.setText(uhrzeit)
             self.labelDate.setText(str(now.day)+'.'+str(now.month)+'.'+str(now.year))
             self.update_torstatus()
@@ -119,6 +131,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
 
     def uhr(self):
+        self.labelStatusTime = 3
         self.uhrzeitdp = 1
         self.schaunach = 0
         self.holetemp = 0
@@ -148,6 +161,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
     def openRadio(self):
         self.radio =  RadioWindow(self)
+        self.radio.statusSignal.connect(self.setStatus)
         self.radio.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.radio.move(0, 0)
         self.radio.show()
@@ -180,8 +194,8 @@ class MainWindow(MainWindowBase, MainWindowUI):
 def main():
     app = QApplication(sys.argv)
     anzeige = MainWindow()
-    anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-    anzeige.move(0, 0)
+    #anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+    #anzeige.move(0, 0)
     anzeige.show()
     app.exec_()
     #sys.exit(app.exec_())
