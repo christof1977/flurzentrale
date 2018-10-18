@@ -72,6 +72,7 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
                 self.statusSignal.emit("Nix Radio!")
                 self.status = 1
         else: # Hier lang ohne erfolgreichen ping
+            print("nix is!")
             self.statusSignal.emit("Nix Radio!")
             self.status = 1
 
@@ -81,8 +82,8 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
             self.home()
 
     def playRadio(self):
-        #if(self.radioConfig[2] != None):
-        #    remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "Himbeer314")
+        if(self.radioConfig[2] != None):
+            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "Himbeer314")
         radio2play = self.listWidgetRadio.currentItem().text()
         print(radio2play)
         try:
