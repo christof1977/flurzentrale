@@ -39,9 +39,11 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
         #self.pushButtonRadioPlay.clicked.connect(self.playRadio)
         self.pushButtonVolDown.clicked.connect(self.volDown)
         self.pushButtonVolUp.clicked.connect(self.volUp)
+        self.pushButtonMute.clicked.connect(self.mute)
         self.pushButtonHome.clicked.connect(self.home)
-        #self.pushButtonHome.setIcon(QtGui.QIcon(":/images/gui/home.png"))
-        #self.pushButtonHome.setIconSize(QtCore.QSize(24,24))
+        self.pushButtonCD.clicked.connect(self.cd)
+        self.pushButtonLP.clicked.connect(self.lp)
+        self.pushButtonPi.clicked.connect(self.pi)
 
 
 
@@ -60,6 +62,19 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
         if(self.ampiConfig[2]!=None):
             remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "vol_down")
             self.statusSignal.emit("Leiser")
+
+    def mute(self):
+        pass
+
+    def cd(self):
+        pass
+
+    def lp(self):
+        pass
+
+    def pi(self):
+        pass
+
 
     def home(self):
         self.hide()

@@ -1,7 +1,12 @@
 <RCC>
     <qresource prefix="/images">
         <file>gui/home.png</file>
-        <file>gui/CD.svg</file>
+        <file>gui/vol_down.png</file>
+        <file>gui/vol_up.png</file>
+        <file>gui/lp.png</file>
+        <file>gui/cd.png</file>
+        <file>gui/pi.png</file>
+        <file>gui/mute.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
