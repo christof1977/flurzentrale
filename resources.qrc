@@ -8,6 +8,19 @@
         <file>gui/pi.png</file>
         <file>gui/mute.png</file>
         <file>gui/tv.png</file>
+        <file>gui/radio_w.png</file>
+        <file>gui/radio_a.png</file>
+        <file>gui/heavy-metal.png</file>
+        <file>gui/garage_closed.png</file>
+        <file>gui/garage_open.png</file>
+        <file>gui/stop.png</file>
+        <file>gui/play.png</file>
+        <file>gui/radio.png</file>
+        <file>gui/thermometer.png</file>
+        <file>gui/light.png</file>
+        <file>gui/portable.png</file>
+        <file>gui/clock.png</file>
+        <file>gui/cassette.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

@@ -125,7 +125,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
                 self.labelStatus.setText("Dumdidum ...")
 
             self.labelTime.setText(uhrzeit)
-            self.labelDate.setText(str(now.day)+'.'+str(now.month)+'.'+str(now.year))
+            self.labelDate.setText(str(now.day).zfill(2)+'.'+str(now.month).zfill(2)+'.'+str(now.year))
             self.update_torstatus()
             self.update_temp()
             self.t_stop.wait(1)

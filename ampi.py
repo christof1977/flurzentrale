@@ -44,7 +44,11 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
         self.pushButtonCD.clicked.connect(self.cd)
         self.pushButtonLP.clicked.connect(self.lp)
         self.pushButtonPi.clicked.connect(self.pi)
+        self.pushButtonPortable.clicked.connect(self.portable)
+        self.pushButtonCassette.clicked.connect(self.cassette)
         self.pushButtonSchneitzlberger.clicked.connect(self.schneitzlberger)
+        self.pushButtonClock.clicked.connect(self.clock)
+        self.pushButtonLight.clicked.connect(self.light)
 
 
 
@@ -81,6 +85,23 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
     def pi(self):
         remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Himbeer314")
         self.statusSignal.emit("Himbeer314")
+
+    def portable(self):
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Portable")
+        self.statusSignal.emit("Portable")
+
+    def cassette(self):
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Hilfssherriffeingang")
+        self.statusSignal.emit("Hilfssherriffeingang")
+
+    def clock(self):
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "clock")
+        self.statusSignal.emit("Dim Clock")
+
+    def light(self):
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "hyperion")
+        self.statusSignal.emit("hyperion")
+
 
 
     def home(self):
