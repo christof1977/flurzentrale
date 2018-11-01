@@ -27,13 +27,15 @@ CONFIG += c++11
 SOURCES += \
         main.py \
         radio.py \
-        stations.py
+        stations.py \
+        ampi.py
 
 FORMS += \
         mainwindow.ui \
     radiowindow.ui \
     gui/mainwindow.ui \
-    gui/radiowindow.ui
+    gui/radiowindow.ui \
+    gui/ampiwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -49,4 +51,4 @@ DISTFILES += \
     libby/tempsensors.py \
 
 RESOURCES += \
-    resoources.qrc
+    resources.qrc

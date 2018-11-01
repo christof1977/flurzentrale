@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
 
 from radio import RadioWindow
+from ampi import AmpiWindow
 
 import threading
 from threading import Thread
@@ -167,6 +168,15 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.radio.show()
         self.radio.checkStatus()
 
+    def openAmpi(self):
+        self.radioConfig = radioConfigW
+        self.ampi =  AmpiWindow(self)
+        self.ampi.statusSignal.connect(self.setStatus)
+        self.ampi.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.ampi.move(0, 0)
+        self.ampi.show()
+
+
 
     def __init__(self):
         self.mysqluser = 'heizung'
@@ -179,6 +189,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.pushButtonTor.clicked.connect(self.torAufZu)
         self.pushButtonOpenRadioW.clicked.connect(self.openRadioW)
         self.pushButtonOpenRadioA.clicked.connect(self.openRadioA)
+        self.pushButtonOpenAmpi.clicked.connect(self.openAmpi)
 
         self.t_stop = threading.Event()
 
@@ -202,4 +213,4 @@ def main():
     #sys.exit()
 
 if __name__ == "__main__":
-    main() 
+    main()

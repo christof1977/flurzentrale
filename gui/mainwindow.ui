@@ -917,7 +917,7 @@ background-color: rgb(40,40,40)
      <string>Leer</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonOpenLeer9">
+   <widget class="QPushButton" name="pushButtonOpenAmpi">
     <property name="geometry">
      <rect>
       <x>310</x>
@@ -1123,7 +1123,7 @@ background-color: rgb(40,40,40)
 </string>
     </property>
     <property name="text">
-     <string>Leer</string>
+     <string>Ampi</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonOpenLeer6">
