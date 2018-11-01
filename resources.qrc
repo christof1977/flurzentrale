@@ -7,6 +7,7 @@
         <file>gui/cd.png</file>
         <file>gui/pi.png</file>
         <file>gui/mute.png</file>
+        <file>gui/tv.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

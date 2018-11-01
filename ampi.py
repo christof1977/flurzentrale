@@ -44,6 +44,7 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
         self.pushButtonCD.clicked.connect(self.cd)
         self.pushButtonLP.clicked.connect(self.lp)
         self.pushButtonPi.clicked.connect(self.pi)
+        self.pushButtonSchneitzlberger.clicked.connect(self.schneitzlberger)
 
 
 
@@ -54,31 +55,33 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
 
 
     def volUp(self):
-        if(self.ampiConfig[2]!=None):
-            remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "vol_up")
-            self.statusSignal.emit("Lauter")
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "vol_up")
+        self.statusSignal.emit("Lauter")
 
     def volDown(self):
-        if(self.ampiConfig[2]!=None):
-            remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "vol_down")
-            self.statusSignal.emit("Leiser")
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "vol_down")
+        self.statusSignal.emit("Leiser")
 
     def mute(self):
-        pass
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "mute")
+        self.statusSignal.emit("Still")
+
+    def schneitzlberger(self):
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Schneitzlberger")
+        self.statusSignal.emit("Schneitzlberger")
 
     def cd(self):
-        pass
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "CD")
+        self.statusSignal.emit("CD")
 
     def lp(self):
-        pass
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Bladdnspiela")
+        self.statusSignal.emit("Bladdnspiela")
 
     def pi(self):
-        pass
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Himbeer314")
+        self.statusSignal.emit("Himbeer314")
 
 
     def home(self):
         self.hide()
-        #self.close()
-
-
-
