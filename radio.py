@@ -4,7 +4,7 @@ from os import path, getenv
 
 import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QDate, QTime, QDateTime, Qt, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QDate, QTime, QDateTime, Qt, pyqtSignal, pyqtSlot, QSize
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
 
@@ -38,12 +38,33 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         super(RadioWindow, self).__init__(parent)
         self.setupUi(self) # gets defined in the UI file
         self.pushButtonRadioStop.clicked.connect(self.stopRadio)
-        self.pushButtonRadioPlay.clicked.connect(self.playRadio)
         self.pushButtonVolDown.clicked.connect(self.volDown)
         self.pushButtonVolUp.clicked.connect(self.volUp)
         self.pushButtonHome.clicked.connect(self.home)
-        self.defineRadioList()
+        #self.defineRadioList()
+        self.defineRadioLogos()
         self.startRadio(parent)
+
+
+    def defineRadioLogos(self):
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setObjectName("gridLayout")
+        positions = [(i,j) for i in range(3) for j in range(5)]
+
+        for position, radioStation in zip(positions, radioStations.items()):
+            if radioStation[0] == '':
+                continue
+            if radioStation[1][1] == '':
+                continue
+            btn = QPushButton()
+            btn.setObjectName(radioStation[0])
+            self.gridLayout.addWidget(btn, *position)
+            btn.setIcon(QtGui.QIcon(radioStation[1][1]))
+            btn.setIconSize(QSize(64, 64))
+
+
+
+            btn.clicked.connect(self.playRadio)
 
     def defineRadioList(self):
         for radioName in radioStations:
@@ -81,13 +102,15 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         if(self.status):
             self.home()
 
+
+
     def playRadio(self):
         if(self.radioConfig[2] != None):
             remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "Himbeer314")
-        radio2play = self.listWidgetRadio.currentItem().text()
+        radio2play = self.sender().objectName()
         print(radio2play)
         try:
-            radioUrl = radioStations[radio2play]
+            radioUrl = radioStations[radio2play][0]
         except:
             print("No URL found!")
         print(radioUrl)

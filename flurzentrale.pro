@@ -28,7 +28,13 @@ SOURCES += \
         main.py \
         radio.py \
         stations.py \
-        ampi.py
+        ampi.py \
+        libby/README.md \
+        libby/__init__.py \
+        libby/logger.py \
+        libby/mysqldose.py \
+        libby/remoteAmpiUdp.py \
+        libby/tempsensors.py \
 
 FORMS += \
         mainwindow.ui \
@@ -43,12 +49,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    libby/README.md \
-    libby/__init__.py \
-    libby/logger.py \
-    libby/mysqldose.py \
-    libby/remoteAmpiUdp.py \
-    libby/tempsensors.py \
-
+    
 RESOURCES += \
     resources.qrc
