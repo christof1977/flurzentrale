@@ -22,5 +22,17 @@
         <file>gui/clock.png</file>
         <file>gui/cassette.png</file>
     </qresource>
-    <qresource prefix="/"/>
+    <qresource prefix="/radiologos">
+        <file>radiologos/starfm.jpg</file>
+        <file>radiologos/rockantenne.png</file>
+        <file>radiologos/antenne.png</file>
+        <file>radiologos/gong971.png</file>
+        <file>radiologos/jazztime_nbg.png</file>
+        <file>radiologos/audiophile_jazz.png</file>
+        <file>radiologos/radio-buh.png</file>
+        <file>radiologos/br_heimat.png</file>
+        <file>radiologos/bayern3.png</file>
+        <file>radiologos/bayern1.png</file>
+        <file>radiologos/bayern2.png</file>
+    </qresource>
 </RCC>
