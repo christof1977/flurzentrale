@@ -34,5 +34,6 @@
         <file>radiologos/bayern3.png</file>
         <file>radiologos/bayern1.png</file>
         <file>radiologos/bayern2.png</file>
+        <file>radiologos/afkmax.png</file>
     </qresource>
 </RCC>
