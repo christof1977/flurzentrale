@@ -41,7 +41,6 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         self.pushButtonVolDown.clicked.connect(self.volDown)
         self.pushButtonVolUp.clicked.connect(self.volUp)
         self.pushButtonHome.clicked.connect(self.home)
-        #self.defineRadioList()
         self.defineRadioLogos()
         self.startRadio(parent)
 
@@ -51,7 +50,7 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         self.gridLayout.setObjectName("gridLayout")
         positions = [(i,j) for i in range(3) for j in range(5)]
 
-        for position, radioStation in zip(positions, radioStations.items()):
+        for position, radioStation in zip(positions, sorted(radioStations.items())):
             if radioStation[0] == '':
                 continue
             if radioStation[1][1] == '':
@@ -61,22 +60,8 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
             self.gridLayout.addWidget(btn, *position)
             btn.setIcon(QtGui.QIcon(radioStation[1][1]))
             btn.setIconSize(QSize(64, 64))
-
-
-
             btn.clicked.connect(self.playRadio)
 
-    def defineRadioList(self):
-        for radioName in radioStations:
-            item = QtWidgets.QListWidgetItem(radioName)
-            font = QtGui.QFont()
-            font.setPointSize(24)
-            item.setFont(font)
-            brush = QtGui.QBrush(QtGui.QColor(160, 160, 160))
-            brush.setStyle(QtCore.Qt.NoBrush)
-            item.setForeground(brush)
-            self.listWidgetRadio.addItem(item)
-        self.listWidgetRadio.setCurrentRow(0)
 
     def startRadio(self, parent):
         p = subprocess.Popen(['ping',self.radioConfig[1],'-c','1',"-W","2"])
