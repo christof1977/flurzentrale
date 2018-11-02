@@ -203,10 +203,15 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
 
 def main():
+    import platform
+    node = platform._syscmd_uname('-n')
+    os = platform._syscmd_uname('')
+    machine = platform.machine()
     app = QApplication(sys.argv)
     anzeige = MainWindow()
-    anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-    anzeige.move(0, 0)
+    if(node == "flur" and os == "Linux"):
+        anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        anzeige.move(0, 0)
     anzeige.show()
     app.exec_()
     #sys.exit(app.exec_())
