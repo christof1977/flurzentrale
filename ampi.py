@@ -95,12 +95,12 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
         self.statusSignal.emit("Hilfssherriffeingang")
 
     def clock(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "clock")
-        self.statusSignal.emit("Dim Clock")
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "dim_sw")
+        self.statusSignal.emit("LCD an oder aus")
 
     def light(self):
         remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "hyperion")
-        self.statusSignal.emit("hyperion")
+        self.statusSignal.emit("Lichtspiele")
 
 
 
