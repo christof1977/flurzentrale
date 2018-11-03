@@ -32,8 +32,12 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
 
     def __init__(self, parent):
         self.status = 0
-        self.ampiConfig = parent.radioConfig
-        super(AmpiWindow, self).__init__(parent)
+        if(type(parent) is not list):
+            self.ampiConfig = parent.radioConfig
+            super(AmpiWindow, self).__init__(parent)
+        else:
+            self.ampiConfig = parent
+            super(AmpiWindow, self).__init__()
         self.setupUi(self) # gets defined in the UI file
         #self.pushButtonRadioStop.clicked.connect(self.stopRadio)
         #self.pushButtonRadioPlay.clicked.connect(self.playRadio)
@@ -106,3 +110,24 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
 
     def home(self):
         self.hide()
+
+
+
+def main():
+    import platform
+    node = platform._syscmd_uname('-n')
+    os = platform._syscmd_uname('')
+    machine = platform.machine()
+    app = QApplication(sys.argv)
+    radioConfigW  = ["Wohnzimmer", "osmd.fritz.box", "osmd.fritz.box", 5005]
+    anzeige = AmpiWindow(radioConfigW)
+    if(node == "flur" and os == "Linux"):
+        anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        anzeige.move(0, 0)
+    anzeige.show()
+    #app.exec_()
+    sys.exit(app.exec_())
+    #sys.exit()
+
+if __name__ == "__main__":
+    main()
