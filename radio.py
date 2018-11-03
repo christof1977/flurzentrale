@@ -38,11 +38,12 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         super(RadioWindow, self).__init__(parent)
         self.setupUi(self) # gets defined in the UI file
         self.pushButtonRadioStop.clicked.connect(self.stopRadio)
-        self.pushButtonVolDown.clicked.connect(self.volDown)
-        self.pushButtonVolUp.clicked.connect(self.volUp)
+        self.pushButtonVolDown.clicked.connect(lambda: self.send2ampi("Volume", "down"))
+        self.pushButtonVolUp.clicked.connect(lambda: self.send2ampi("Volume", "up"))
         self.pushButtonHome.clicked.connect(self.home)
         self.defineRadioLogos()
         self.startRadio(parent)
+
 
 
     def defineRadioLogos(self):
@@ -87,11 +88,16 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         if(self.status):
             self.home()
 
+    def send2ampi(self, aktion, par):
+        cmd = { "Aktion": aktion, "Parameter": par }
+        json_cmd = json.dumps(cmd)
+        remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], json_cmd)
+        self.statusSignal.emit(aktion + ": " + par)
 
 
     def playRadio(self):
         if(self.radioConfig[2] != None):
-            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "Himbeer314")
+            self.send2ampi("Input", "Himbeer314")
         radio2play = self.sender().objectName()
         print(radio2play)
         try:
@@ -110,23 +116,13 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
     def stopRadio(self):
         if(self.radioConfig[2]!=None):
             print("mit Verstärker")
-            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "Schneitzlberger")
+            self.send2ampi("Input", "Schneitzlberger")
         try:
             playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
             result = self.kodi.Player.Stop({"playerid": playerid})
             self.statusSignal.emit("Aus is!")
         except:
             pass
-
-    def volUp(self):
-        if(self.radioConfig[2]!=None):
-            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "vol_up")
-            self.statusSignal.emit("Lauter")
-
-    def volDown(self):
-        if(self.radioConfig[2]!=None):
-            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], "vol_down")
-            self.statusSignal.emit("Leiser")
 
     def home(self):
         self.hide()

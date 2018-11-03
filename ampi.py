@@ -41,72 +41,30 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
         self.setupUi(self) # gets defined in the UI file
         #self.pushButtonRadioStop.clicked.connect(self.stopRadio)
         #self.pushButtonRadioPlay.clicked.connect(self.playRadio)
-        self.pushButtonVolDown.clicked.connect(self.volDown)
-        self.pushButtonVolUp.clicked.connect(self.volUp)
-        self.pushButtonMute.clicked.connect(self.mute)
+        self.pushButtonVolDown.clicked.connect(lambda: self.send2ampi("Volume", "down"))
+        self.pushButtonVolUp.clicked.connect(lambda: self.send2ampi("Volume", "up"))
+        self.pushButtonMute.clicked.connect(lambda: self.send2ampi("Volume", "mute"))
         self.pushButtonHome.clicked.connect(self.home)
-        self.pushButtonCD.clicked.connect(self.cd)
-        self.pushButtonLP.clicked.connect(self.lp)
-        self.pushButtonPi.clicked.connect(self.pi)
-        self.pushButtonPortable.clicked.connect(self.portable)
-        self.pushButtonCassette.clicked.connect(self.cassette)
-        self.pushButtonSchneitzlberger.clicked.connect(self.schneitzlberger)
-        self.pushButtonClock.clicked.connect(self.clock)
-        self.pushButtonLight.clicked.connect(self.light)
+        self.pushButtonCD.clicked.connect(lambda: self.send2ampi("Input", "CD"))
+        self.pushButtonLP.clicked.connect(lambda: self.send2ampi("Input", "Bladdnspiela"))
+        self.pushButtonPi.clicked.connect(lambda: self.send2ampi("Input", "Himbeer314"))
+        self.pushButtonPortable.clicked.connect(lambda: self.send2ampi("Input", "Portable"))
+        self.pushButtonCassette.clicked.connect(lambda: self.send2ampi("Input", "Hilfssherriffeingang"))
+        self.pushButtonSchneitzlberger.clicked.connect(lambda: self.send2ampi("Input", "Schneitzlberger"))
+        self.pushButtonClock.clicked.connect(lambda: self.send2ampi("Switch", "dim_sw"))
+        self.pushButtonLight.clicked.connect(lambda: self.send2ampi("hyperion", ""))
 
 
 
     def checkStatus(self):
-        #print(self.status)
         if(self.status):
             self.home()
 
-
-    def volUp(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "vol_up")
-        self.statusSignal.emit("Lauter")
-
-    def volDown(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "vol_down")
-        self.statusSignal.emit("Leiser")
-
-    def mute(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "mute")
-        self.statusSignal.emit("Still")
-
-    def schneitzlberger(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Schneitzlberger")
-        self.statusSignal.emit("Schneitzlberger")
-
-    def cd(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "CD")
-        self.statusSignal.emit("CD")
-
-    def lp(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Bladdnspiela")
-        self.statusSignal.emit("Bladdnspiela")
-
-    def pi(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Himbeer314")
-        self.statusSignal.emit("Himbeer314")
-
-    def portable(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Portable")
-        self.statusSignal.emit("Portable")
-
-    def cassette(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "Hilfssherriffeingang")
-        self.statusSignal.emit("Hilfssherriffeingang")
-
-    def clock(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "dim_sw")
-        self.statusSignal.emit("LCD an oder aus")
-
-    def light(self):
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], "hyperion")
-        self.statusSignal.emit("Lichtspiele")
-
-
+    def send2ampi(self, aktion, par):
+        cmd = { "Aktion": aktion, "Parameter": par }
+        json_cmd = json.dumps(cmd)
+        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], json_cmd)
+        self.statusSignal.emit(aktion + ": " + par)
 
     def home(self):
         self.hide()
