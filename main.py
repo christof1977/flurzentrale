@@ -25,12 +25,24 @@ from kodijson import Kodi
 from libby import mysqldose
 from libby.mysqldose import mysqldose
 
+import resources_rc
+
 garagn_tcp_addr = 'garagn.fritz.box'
 garagn_tcp_port = 80
 buffer_size = 1024
 radioConfigW  = ["Wohnzimmer", "osmd.fritz.box", "osmd.fritz.box", 5005]
 radioConfigA  = ["Arbeitszimmmer", "osme.fritz.box", None, None]
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = path.dirname(path.abspath(__file__))
+        #base_path = os.path.abspath(".")
+
+    return path.join(base_path, relative_path)
 
 
 def sende(tcp_sock, tcp_addr, tcp_port, json_cmd):
@@ -55,7 +67,8 @@ def json_dec(json_string):
     return out
 
 
-MainWindowUI, MainWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/mainwindow.ui'))
+#MainWindowUI, MainWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/mainwindow.ui'))
+MainWindowUI, MainWindowBase = loadUiType(resource_path('gui/mainwindow.ui'))
 
 
 class MainWindow(MainWindowBase, MainWindowUI):
@@ -166,6 +179,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.radio.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.radio.move(0, 0)
         self.radio.show()
+        self.radio.raise_()
         self.radio.checkStatus()
 
     def openAmpi(self):
@@ -175,6 +189,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.ampi.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.ampi.move(0, 0)
         self.ampi.show()
+        self.ampi.raise_()
 
 
 
@@ -213,6 +228,7 @@ def main():
         anzeige.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         anzeige.move(0, 0)
     anzeige.show()
+    anzeige.raise_()
     app.exec_()
     #sys.exit(app.exec_())
     #sys.exit()
