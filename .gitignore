@@ -1,1 +1,5 @@
-__pycache__
+flurzentrale.pro.user
+build/
+dist/
+.DS_Store
+__pycache__/
