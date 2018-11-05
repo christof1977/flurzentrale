@@ -89,14 +89,17 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
             self.home()
 
     def send2ampi(self, aktion, par):
-        cmd = { "Aktion": aktion, "Parameter": par }
-        json_cmd = json.dumps(cmd)
-        remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], json_cmd)
-        self.statusSignal.emit(aktion + ": " + par)
+        if(self.radioConfig[2] is not None):
+            cmd = { "Aktion": aktion, "Parameter": par }
+            json_cmd = json.dumps(cmd)
+            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], json_cmd)
+            self.statusSignal.emit(aktion + ": " + par)
+        else:
+            print("Kein Amp da!")
 
 
     def playRadio(self):
-        if(self.radioConfig[2] != None):
+        if(self.radioConfig[2] is not None):
             self.send2ampi("Input", "Himbeer314")
         radio2play = self.sender().objectName()
         print(radio2play)
@@ -114,7 +117,7 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
             #print(str(e))
 
     def stopRadio(self):
-        if(self.radioConfig[2]!=None):
+        if(self.radioConfig[2] is not None):
             print("mit Verstärker")
             self.send2ampi("Input", "Schneitzlberger")
         try:
