@@ -88,20 +88,26 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         if(self.status):
             self.home()
 
+    def changeKodiVolume(self, par):
+        try:
+            ret = "Ups ..."
+            if(par == "up"):
+                ret = self.kodi.Application.SetVolume({"volume": "increment"})['result']
+            elif(par == "down"):
+                ret = self.kodi.Application.SetVolume({"volume": "decrement"})['result']
+            if(par == "mute"):
+                ret = self.kodi.Application.SetVolume({"mute": True})['result']
+            self.statusSignal.emit("Volume: " + str(ret))
+        except Exception as e:
+            print("Kann nicht mit Kodi labern: " + str(e))
+
+
+
     def changeVolume(self, par):
         if(self.radioConfig[2] is not None):
             self.send2ampi("Volume", par)
         else:
-            if(par == "up"):
-                dir = "increment"
-            else:
-                dir = "decrement"
-            try:
-                ret = self.kodi.Application.SetVolume({"volume": dir})
-                self.statusSignal.emit("Volume: " + par)
-            except Exception as e:
-                print("Kann nicht mit Kodi labern: " + str(e))
-                #print(str(e))
+            self.changeKodiVolume(par)
 
     def send2ampi(self, aktion, par):
         cmd = { "Aktion": aktion, "Parameter": par }
