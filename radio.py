@@ -38,8 +38,8 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         super(RadioWindow, self).__init__(parent)
         self.setupUi(self) # gets defined in the UI file
         self.pushButtonRadioStop.clicked.connect(self.stopRadio)
-        self.pushButtonVolDown.clicked.connect(lambda: self.send2ampi("Volume", "down"))
-        self.pushButtonVolUp.clicked.connect(lambda: self.send2ampi("Volume", "up"))
+        self.pushButtonVolDown.clicked.connect(lambda: self.changeVolume("down"))
+        self.pushButtonVolUp.clicked.connect(lambda: self.changeVolume("up"))
         self.pushButtonHome.clicked.connect(self.home)
         self.defineRadioLogos()
         self.startRadio(parent)
@@ -88,15 +88,26 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         if(self.status):
             self.home()
 
-    def send2ampi(self, aktion, par):
+    def changeVolume(self, par):
         if(self.radioConfig[2] is not None):
-            cmd = { "Aktion": aktion, "Parameter": par }
-            json_cmd = json.dumps(cmd)
-            remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], json_cmd)
-            self.statusSignal.emit(aktion + ": " + par)
+            self.send2ampi("Volume", par)
         else:
-            print("Kein Amp da!")
+            if(par == "up"):
+                dir = "increment"
+            else:
+                dir = "decrement"
+            try:
+                ret = self.kodi.Application.SetVolume({"volume": dir})
+                self.statusSignal.emit("Volume: " + par)
+            except Exception as e:
+                print("Kann nicht mit Kodi labern: " + str(e))
+                #print(str(e))
 
+    def send2ampi(self, aktion, par):
+        cmd = { "Aktion": aktion, "Parameter": par }
+        json_cmd = json.dumps(cmd)
+        remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], json_cmd)
+        self.statusSignal.emit(aktion + ": " + par)
 
     def playRadio(self):
         if(self.radioConfig[2] is not None):
