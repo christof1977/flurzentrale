@@ -38,8 +38,8 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         super(RadioWindow, self).__init__(parent)
         self.setupUi(self) # gets defined in the UI file
         self.pushButtonRadioStop.clicked.connect(self.stopRadio)
-        self.pushButtonVolDown.clicked.connect(lambda: self.changeVolume("down"))
-        self.pushButtonVolUp.clicked.connect(lambda: self.changeVolume("up"))
+        self.pushButtonVolDown.clicked.connect(lambda: self.changeVolume("Down"))
+        self.pushButtonVolUp.clicked.connect(lambda: self.changeVolume("Up"))
         self.pushButtonHome.clicked.connect(self.home)
         self.defineRadioLogos()
         self.startRadio(parent)
@@ -91,11 +91,11 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
     def changeKodiVolume(self, par):
         try:
             ret = "Ups ..."
-            if(par == "up"):
+            if(par == "Up"):
                 ret = self.kodi.Application.SetVolume({"volume": "increment"})['result']
-            elif(par == "down"):
+            elif(par == "Down"):
                 ret = self.kodi.Application.SetVolume({"volume": "decrement"})['result']
-            if(par == "mute"):
+            if(par == "Mute"):
                 ret = self.kodi.Application.SetVolume({"mute": True})['result']
             self.statusSignal.emit("Volume: " + str(ret))
         except Exception as e:

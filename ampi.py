@@ -41,18 +41,18 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
         self.setupUi(self) # gets defined in the UI file
         #self.pushButtonRadioStop.clicked.connect(self.stopRadio)
         #self.pushButtonRadioPlay.clicked.connect(self.playRadio)
-        self.pushButtonVolDown.clicked.connect(lambda: self.send2ampi("Volume", "down"))
-        self.pushButtonVolUp.clicked.connect(lambda: self.send2ampi("Volume", "up"))
-        self.pushButtonMute.clicked.connect(lambda: self.send2ampi("Volume", "mute"))
+        self.pushButtonVolDown.clicked.connect(lambda: self.send2ampi("Volume", "Down"))
+        self.pushButtonVolUp.clicked.connect(lambda: self.send2ampi("Volume", "Up"))
+        self.pushButtonMute.clicked.connect(lambda: self.send2ampi("Volume", "Mute"))
         self.pushButtonHome.clicked.connect(self.home)
         self.pushButtonCD.clicked.connect(lambda: self.send2ampi("Input", "CD"))
         self.pushButtonLP.clicked.connect(lambda: self.send2ampi("Input", "Bladdnspiela"))
         self.pushButtonPi.clicked.connect(lambda: self.send2ampi("Input", "Himbeer314"))
         self.pushButtonPortable.clicked.connect(lambda: self.send2ampi("Input", "Portable"))
-        self.pushButtonCassette.clicked.connect(lambda: self.send2ampi("Input", "Hilfssherriffeingang"))
+        self.pushButtonCassette.clicked.connect(lambda: self.send2ampi("Input", "Hilfssherriff"))
         self.pushButtonSchneitzlberger.clicked.connect(lambda: self.send2ampi("Input", "Schneitzlberger"))
-        self.pushButtonClock.clicked.connect(lambda: self.send2ampi("Switch", "dim_sw"))
-        self.pushButtonLight.clicked.connect(lambda: self.send2ampi("hyperion", ""))
+        self.pushButtonClock.clicked.connect(lambda: self.send2ampi("Switch", "DimOled"))
+        self.pushButtonLight.clicked.connect(lambda: self.send2ampi("Hyperion", ""))
 
 
 
