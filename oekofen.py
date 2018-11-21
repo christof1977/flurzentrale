@@ -63,7 +63,6 @@ class OekofenWindow(OekofenWindowBase, OekofenWindowUI):
         while(not self.tStop.is_set()):
             try:
                 with urllib.request.urlopen(self.pelle) as response:
-                    print("Ping")
                     self.statusSignal.emit("Antwort vom Ofen")
                     mydata = response.read()
                     d = json.loads(mydata.decode())
