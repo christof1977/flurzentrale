@@ -47,7 +47,6 @@ class OekofenWindow(OekofenWindowBase, OekofenWindowUI):
             self.config = configparser.ConfigParser()
             self.config.read(configfile)
             self.pelle = self.config['BASE']['Pelle']
-            print(self.pelle)
         except:
             print("Configuration error")
 
@@ -66,6 +65,7 @@ class OekofenWindow(OekofenWindowBase, OekofenWindowUI):
                     self.statusSignal.emit("Antwort vom Ofen")
                     mydata = response.read()
                     d = json.loads(mydata.decode())
+                    self.lbl_pe1_status.setText(str(d["pe1"]["L_statetext"]))
                     self.lbl_pe1_modulation.setText(str(d["pe1"]["L_modulation"])+"%")
                     self.lbl_pe1_temp_act.setText(str(float(d["pe1"]["L_temp_act"])/10)+" °C")
                     self.lbl_pe1_avg_runtime.setText(str(float(d["pe1"]["L_avg_runtime"]))+" min")
@@ -74,6 +74,17 @@ class OekofenWindow(OekofenWindowBase, OekofenWindowUI):
                     self.lbl_pu1_tpo_act.setText(str(float(d["pu1"]["L_tpo_act"])/10)+" °C")
                     self.lbl_pu1_tpm_act.setText(str(float(d["pu1"]["L_tpm_act"])/10)+" °C")
                     self.lbl_sk1_spu.setText(str(float(d["sk1"]["L_spu"])/10)+" °C")
+                    self.lbl_sk1_koll_temp.setText(str(float(d["sk1"]["L_koll_temp"])/10)+" °C")
+                    self.lbl_sk1_pump.setText(str(d["sk3"]["L_pump"])+" %")
+                    self.lbl_sk3_koll_temp.setText(str(float(d["sk3"]["L_koll_temp"])/10)+" °C")
+                    self.lbl_sk3_pump.setText(str(d["sk3"]["L_pump"])+" %")
+                    self.lbl_se2_flow_temp.setText(str(float(d["se2"]["L_flow_temp"])/10)+" °C")
+                    self.lbl_se2_ret_temp.setText(str(float(d["se2"]["L_ret_temp"])/10)+" °C")
+                    self.lbl_se2_day.setText(str(float(d["se2"]["L_day"])/10)+" kWh")
+                    self.lbl_se2_yesterday.setText(str(float(d["se2"]["L_yesterday"])/10)+" kWh")
+
+
+
 
 
 

@@ -22,7 +22,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>320</width>
+      <width>101</width>
       <height>31</height>
      </rect>
     </property>
@@ -279,7 +279,7 @@ background-color: rgb(60,60,60)
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>Pumpe West:</string>
          </property>
         </widget>
        </item>
@@ -289,7 +289,7 @@ background-color: rgb(60,60,60)
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>Pumpe Ost:</string>
          </property>
         </widget>
        </item>
@@ -299,7 +299,7 @@ background-color: rgb(60,60,60)
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>Vorlauf Temp:</string>
          </property>
         </widget>
        </item>
@@ -309,7 +309,7 @@ background-color: rgb(60,60,60)
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>Kollektor Ost:</string>
          </property>
         </widget>
        </item>
@@ -319,7 +319,7 @@ background-color: rgb(60,60,60)
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>Kollektor West:</string>
          </property>
         </widget>
        </item>
@@ -329,7 +329,7 @@ background-color: rgb(60,60,60)
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>Rücklauf Temp:</string>
          </property>
         </widget>
        </item>
@@ -339,7 +339,7 @@ background-color: rgb(60,60,60)
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>Ertrag:</string>
          </property>
         </widget>
        </item>
@@ -349,12 +349,12 @@ background-color: rgb(60,60,60)
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>...</string>
+          <string>Ertrag gestern:</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLabel" name="lbl_1">
+        <widget class="QLabel" name="lbl_sk1_koll_temp">
          <property name="styleSheet">
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
@@ -364,7 +364,7 @@ background-color: rgb(60,60,60)
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLabel" name="lbl_2">
+        <widget class="QLabel" name="lbl_sk1_pump">
          <property name="styleSheet">
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
@@ -374,7 +374,7 @@ background-color: rgb(60,60,60)
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLabel" name="lbl_3">
+        <widget class="QLabel" name="lbl_sk3_koll_temp">
          <property name="styleSheet">
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
@@ -384,7 +384,7 @@ background-color: rgb(60,60,60)
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLabel" name="lbl_4">
+        <widget class="QLabel" name="lbl_sk3_pump">
          <property name="styleSheet">
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
@@ -394,7 +394,7 @@ background-color: rgb(60,60,60)
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLabel" name="lbl_5">
+        <widget class="QLabel" name="lbl_se2_flow_temp">
          <property name="styleSheet">
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
@@ -404,7 +404,7 @@ background-color: rgb(60,60,60)
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLabel" name="lbl_6">
+        <widget class="QLabel" name="lbl_se2_ret_temp">
          <property name="styleSheet">
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
@@ -414,7 +414,7 @@ background-color: rgb(60,60,60)
         </widget>
        </item>
        <item row="6" column="1">
-        <widget class="QLabel" name="lbl_7">
+        <widget class="QLabel" name="lbl_se2_day">
          <property name="styleSheet">
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
@@ -424,7 +424,7 @@ background-color: rgb(60,60,60)
         </widget>
        </item>
        <item row="7" column="1">
-        <widget class="QLabel" name="lbl_8">
+        <widget class="QLabel" name="lbl_se2_yesterday">
          <property name="styleSheet">
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
@@ -483,7 +483,7 @@ background-color: rgb(60,60,60)
           <string notr="true">color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
-          <string>Kesselstatus:</string>
+          <string>Modulation:</string>
          </property>
         </widget>
        </item>
@@ -600,6 +600,38 @@ background-color: rgb(60,60,60)
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="label_28">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>20</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Status:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lbl_pe1_status">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>20</y>
+      <width>107</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>N/A</string>
+    </property>
    </widget>
   </widget>
  </widget>

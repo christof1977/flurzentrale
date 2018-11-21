@@ -3,10 +3,9 @@
 block_cipher = None
 
 add_files = [
-                ('gui/mainwindow.ui', 'gui'),
-                ('gui/ampiwindow.ui', 'gui'),
-                ('gui/radiowindow.ui', 'gui'),
+                ('gui/*.ui', 'gui'),
                 ('resources_rc.py', '.'),
+                ('config.ini', '.')
             ]
 
 a = Analysis(['main.py'],
