@@ -19,7 +19,7 @@ import syslog
 import datetime
 import json
 from kodijson import Kodi
-from libby import remoteAmpiUdp
+from libby import remoteAmpi
 
 from stations import radioStations
 
@@ -112,7 +112,7 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
     def send2ampi(self, aktion, par):
         cmd = { "Aktion": aktion, "Parameter": par }
         json_cmd = json.dumps(cmd)
-        remoteAmpiUdp.sende(None, self.radioConfig[2], self.radioConfig[3], json_cmd)
+        remoteAmpi.udpRemote(json_cmd, addr=self.ampiConfig[2], port=self.ampiConfig[3])
         self.statusSignal.emit(aktion + ": " + par)
 
     def playRadio(self):
