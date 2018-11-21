@@ -21,6 +21,8 @@
         <file>gui/portable.png</file>
         <file>gui/clock.png</file>
         <file>gui/cassette.png</file>
+        <file>gui/oekofen.png</file>
+        <file>gui/oekofen_logo.png</file>
     </qresource>
     <qresource prefix="/radiologos">
         <file>radiologos/starfm.jpg</file>

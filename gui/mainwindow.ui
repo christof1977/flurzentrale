@@ -734,213 +734,6 @@ background-color: rgb(40,40,40)
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonOpenLeer6">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>120</y>
-      <width>64</width>
-      <height>64</height>
-     </rect>
-    </property>
-    <property name="palette">
-     <palette>
-      <active>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Button">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Text">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Base">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Window">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </active>
-      <inactive>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Button">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Text">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Base">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Window">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </inactive>
-      <disabled>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Button">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Text">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Base">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Window">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </disabled>
-     </palette>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>20</pointsize>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>OpenHandCursor</cursorShape>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton
-{
-color: rgb(255, 255, 255);
-background-color: rgb(0, 0,0);
-border-color: rgb(40, 40, 40);
-border-radius: 4px;
-}
-QPushButton:pressed
-{
-background-color: rgb(60,60,60)
-}
-</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButtonOpenAmpi">
     <property name="geometry">
      <rect>
@@ -1161,8 +954,8 @@ background-color: rgb(60,60,60)
    <widget class="QPushButton" name="pushButtonOpenLeer4">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>120</y>
+      <x>410</x>
+      <y>200</y>
       <width>64</width>
       <height>64</height>
      </rect>
@@ -1365,11 +1158,11 @@ background-color: rgb(60,60,60)
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonOpenLeer3">
+   <widget class="QPushButton" name="pushButtonOpenOekofen">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>120</y>
+      <x>60</x>
+      <y>110</y>
       <width>64</width>
       <height>64</height>
      </rect>
@@ -1570,13 +1363,23 @@ background-color: rgb(60,60,60)
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../resources.qrc">
+      <normaloff>:/images/gui/oekofen.png</normaloff>:/images/gui/oekofen.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>64</width>
+      <height>64</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButtonOpenLeer2">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>120</y>
+      <x>340</x>
+      <y>110</y>
       <width>64</width>
       <height>64</height>
      </rect>
@@ -1782,8 +1585,8 @@ background-color: rgb(60,60,60)
    <widget class="QPushButton" name="pushButtonOpenLeer1">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>120</y>
+      <x>200</x>
+      <y>110</y>
       <width>64</width>
       <height>64</height>
      </rect>
@@ -1989,8 +1792,8 @@ background-color: rgb(60,60,60)
    <widget class="QPushButton" name="pushButtonOpenLeer5">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>120</y>
+      <x>270</x>
+      <y>200</y>
       <width>64</width>
       <height>64</height>
      </rect>
@@ -2196,7 +1999,7 @@ background-color: rgb(60,60,60)
    <widget class="QLabel" name="labelTempDraussen_">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>160</x>
       <y>30</y>
       <width>151</width>
       <height>21</height>
@@ -2215,10 +2018,10 @@ background-color: rgb(60,60,60)
    <widget class="QLabel" name="labelTempDraussen">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>50</y>
+      <x>160</x>
+      <y>49</y>
       <width>151</width>
-      <height>50</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
@@ -2243,7 +2046,7 @@ background-color: rgb(60,60,60)
    <widget class="QLabel" name="labelThermometer">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>60</x>
       <y>30</y>
       <width>61</width>
       <height>64</height>

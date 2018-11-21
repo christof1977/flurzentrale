@@ -11,6 +11,7 @@ from PyQt5.uic import loadUiType
 
 from radio import RadioWindow
 from ampi import AmpiWindow
+from oekofen import OekofenWindow
 
 import threading
 from threading import Thread
@@ -192,6 +193,14 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.ampi.raise_()
 
 
+    def openOekofen(self):
+        self.oekofen =  OekofenWindow(self)
+        self.oekofen.statusSignal.connect(self.setStatus)
+        self.oekofen.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.oekofen.move(0, 0)
+        self.oekofen.show()
+        self.oekofen.raise_()
+
 
     def __init__(self):
         self.mysqluser = 'heizung'
@@ -205,6 +214,8 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.pushButtonOpenRadioW.clicked.connect(self.openRadioW)
         self.pushButtonOpenRadioA.clicked.connect(self.openRadioA)
         self.pushButtonOpenAmpi.clicked.connect(self.openAmpi)
+        self.pushButtonOpenOekofen.clicked.connect(self.openOekofen)
+
 
         self.t_stop = threading.Event()
 
