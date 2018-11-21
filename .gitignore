@@ -2,4 +2,5 @@ flurzentrale.pro.user
 build/
 dist/
 .DS_Store
+config.ini
 __pycache__/

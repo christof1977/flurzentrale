@@ -29,6 +29,7 @@ SOURCES += \
         radio.py \
         stations.py \
         ampi.py \
+        oekofen.py \
         libby/README.md \
         libby/__init__.py \
         libby/logger.py \
@@ -41,7 +42,8 @@ FORMS += \
     radiowindow.ui \
     gui/mainwindow.ui \
     gui/radiowindow.ui \
-    gui/ampiwindow.ui
+    gui/ampiwindow.ui \
+    gui/oekofenwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -49,6 +51,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+
     
 RESOURCES += \
     resources.qrc
