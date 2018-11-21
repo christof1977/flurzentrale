@@ -34,7 +34,7 @@ SOURCES += \
         libby/__init__.py \
         libby/logger.py \
         libby/mysqldose.py \
-        libby/remoteAmpiUdp.py \
+        libby/remoteAmpi.py \
         libby/tempsensors.py \
 
 FORMS += \

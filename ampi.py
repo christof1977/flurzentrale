@@ -19,7 +19,7 @@ import syslog
 import datetime
 import json
 from kodijson import Kodi
-from libby import remoteAmpiUdp
+from libby import remoteAmpi
 
 
 AmpiWindowUI, AmpiWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/ampiwindow.ui'))
@@ -63,7 +63,7 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
     def send2ampi(self, aktion, par):
         cmd = { "Aktion": aktion, "Parameter": par }
         json_cmd = json.dumps(cmd)
-        remoteAmpiUdp.sende(None, self.ampiConfig[2], self.ampiConfig[3], json_cmd)
+        remoteAmpi.udpRemote(json_cmd, addr=self.ampiConfig[2], port=self.ampiConfig[3])
         self.statusSignal.emit(aktion + ": " + par)
 
     def home(self):
