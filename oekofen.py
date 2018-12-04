@@ -82,6 +82,11 @@ class OekofenWindow(OekofenWindowBase, OekofenWindowUI):
                     self.lbl_se2_ret_temp.setText(str(float(d["se2"]["L_ret_temp"])/10)+" °C")
                     self.lbl_se2_day.setText(str(float(d["se2"]["L_day"])/10)+" kWh")
                     self.lbl_se2_yesterday.setText(str(float(d["se2"]["L_yesterday"])/10)+" kWh")
+                    st_fill = str(d["pe1"]["L_storage_fill"]) + " kg"
+                    st_popper = str(d["pe1"]["L_storage_popper"]) + " kg"
+                    self.lbl_pe1_storage_fill.setText(st_fill)
+                    self.lbl_pe1_storage_popper.setText(st_popper)
+
 
 
 
@@ -90,6 +95,7 @@ class OekofenWindow(OekofenWindowBase, OekofenWindowUI):
 
             except Exception as e:
                 self.statusSignal.emit("Fehler "+ str(e))
+                print(str(e))
             self.tStop.wait(11)
 
 
