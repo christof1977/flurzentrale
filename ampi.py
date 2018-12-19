@@ -51,6 +51,7 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
         self.pushButtonPortable.clicked.connect(lambda: self.send2ampi("Input", "Portable"))
         self.pushButtonCassette.clicked.connect(lambda: self.send2ampi("Input", "Hilfssherriff"))
         self.pushButtonSchneitzlberger.clicked.connect(lambda: self.send2ampi("Input", "Schneitzlberger"))
+        self.pushButtonPower.clicked.connect(lambda: self.send2ampi("Switch", "Power"))
         self.pushButtonClock.clicked.connect(lambda: self.send2ampi("Switch", "DimOled"))
         self.pushButtonLight.clicked.connect(lambda: self.send2ampi("Hyperion", ""))
 
@@ -63,8 +64,12 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
     def send2ampi(self, aktion, par):
         cmd = { "Aktion": aktion, "Parameter": par }
         json_cmd = json.dumps(cmd)
-        remoteAmpi.udpRemote(json_cmd, addr=self.ampiConfig[2], port=self.ampiConfig[3])
-        self.statusSignal.emit(aktion + ": " + par)
+        ret = remoteAmpi.udpRemote(json_cmd, addr=self.ampiConfig[2], port=self.ampiConfig[3])
+        if(ret != -1):
+            ret = (json.loads(ret))
+            for key in ret.items():
+                print(key)
+            self.statusSignal.emit(ret['Antwort'] + ": " + par)
 
     def home(self):
         self.hide()

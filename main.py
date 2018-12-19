@@ -12,6 +12,7 @@ from PyQt5.uic import loadUiType
 from radio import RadioWindow
 from ampi import AmpiWindow
 from oekofen import OekofenWindow
+from kodi import KodiWindow
 
 import threading
 from threading import Thread
@@ -192,6 +193,15 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.ampi.show()
         self.ampi.raise_()
 
+    def openKodi(self):
+        self.radioConfig = radioConfigW
+        self.kodi =  KodiWindow(self)
+        self.kodi.statusSignal.connect(self.setStatus)
+        self.kodi.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.kodi.move(0, 0)
+        self.kodi.show()
+        self.kodi.raise_()
+
 
     def openOekofen(self):
         self.oekofen =  OekofenWindow(self)
@@ -215,6 +225,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.pushButtonOpenRadioA.clicked.connect(self.openRadioA)
         self.pushButtonOpenAmpi.clicked.connect(self.openAmpi)
         self.pushButtonOpenOekofen.clicked.connect(self.openOekofen)
+        #self.pushButtonOpenKodi.clicked.connect(self.openKodi)
 
 
         self.t_stop = threading.Event()

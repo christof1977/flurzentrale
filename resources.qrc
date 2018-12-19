@@ -23,6 +23,8 @@
         <file>gui/cassette.png</file>
         <file>gui/oekofen.png</file>
         <file>gui/oekofen_logo.png</file>
+        <file>gui/kodi.png</file>
+        <file>gui/power.png</file>
     </qresource>
     <qresource prefix="/radiologos">
         <file>radiologos/starfm.jpg</file>
