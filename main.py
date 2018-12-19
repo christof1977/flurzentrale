@@ -12,7 +12,7 @@ from PyQt5.uic import loadUiType
 from radio import RadioWindow
 from ampi import AmpiWindow
 from oekofen import OekofenWindow
-from kodi import KodiWindow
+#from kodi import KodiWindow
 
 import threading
 from threading import Thread
