@@ -30,6 +30,7 @@ SOURCES += \
         stations.py \
         ampi.py \
         oekofen.py \
+        kodi.py \
         libby/README.md \
         libby/__init__.py \
         libby/logger.py \
@@ -43,14 +44,14 @@ FORMS += \
     gui/mainwindow.ui \
     gui/radiowindow.ui \
     gui/ampiwindow.ui \
-    gui/oekofenwindow.ui
+    gui/oekofenwindow.ui \
+    gui/kodiwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
 
     
 RESOURCES += \
