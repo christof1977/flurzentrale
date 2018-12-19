@@ -136,7 +136,7 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
     def stopRadio(self):
         if(self.radioConfig[2] is not None):
             print("mit Verstärker")
-            self.send2ampi("Input", "Schneitzlberger")
+            self.send2ampi("Switch", "Power")
         try:
             playerid=self.kodi.Player.GetActivePlayers()["result"][0]["playerid"]
             result = self.kodi.Player.Stop({"playerid": playerid})
