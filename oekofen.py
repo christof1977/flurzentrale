@@ -75,7 +75,7 @@ class OekofenWindow(OekofenWindowBase, OekofenWindowUI):
                     self.lbl_pu1_tpm_act.setText(str(float(d["pu1"]["L_tpm_act"])/10)+" °C")
                     self.lbl_sk1_spu.setText(str(float(d["sk1"]["L_spu"])/10)+" °C")
                     self.lbl_sk1_koll_temp.setText(str(float(d["sk1"]["L_koll_temp"])/10)+" °C")
-                    self.lbl_sk1_pump.setText(str(d["sk3"]["L_pump"])+" %")
+                    self.lbl_sk1_pump.setText(str(d["sk1"]["L_pump"])+" %")
                     self.lbl_sk3_koll_temp.setText(str(float(d["sk3"]["L_koll_temp"])/10)+" °C")
                     self.lbl_sk3_pump.setText(str(d["sk3"]["L_pump"])+" %")
                     self.lbl_se2_flow_temp.setText(str(float(d["se2"]["L_flow_temp"])/10)+" °C")
