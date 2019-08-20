@@ -112,8 +112,14 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
     def send2ampi(self, aktion, par):
         cmd = { "Aktion": aktion, "Parameter": par }
         json_cmd = json.dumps(cmd)
-        remoteAmpi.udpRemote(json_cmd, addr=self.radioConfig[2], port=self.radioConfig[3])
-        self.statusSignal.emit(aktion + ": " + par)
+        ret = remoteAmpi.udpRemote(json_cmd, addr=self.radioConfig[2], port=self.radioConfig[3])
+        ret = (json.loads(ret))
+        if 'Input' in ret:
+            if ret['Input'] == -1:
+                ret['Input'] = "Geht net"
+            self.statusSignal.emit(aktion + ": " + '-' + str(ret['Input']))
+        else:
+            self.statusSignal.emit(aktion + ": " + par)
 
     def playRadio(self):
         if(self.radioConfig[2] is not None):
