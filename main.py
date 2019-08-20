@@ -32,8 +32,8 @@ import resources_rc
 garagn_tcp_addr = 'garagn.fritz.box'
 garagn_tcp_port = 80
 buffer_size = 1024
-radioConfigW  = ["Wohnzimmer", "osmd.fritz.box", "osmd.fritz.box", 5005]
-radioConfigA  = ["Arbeitszimmmer", "osme.fritz.box", None, None]
+radioConfigW  = ["Wohnzimmer", "osmd", "osmd", 5005]
+radioConfigA  = ["Arbeitszimmmer", "osme", None, None]
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
