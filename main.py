@@ -12,6 +12,7 @@ from PyQt5.uic import loadUiType
 from radio import RadioWindow
 from ampi import AmpiWindow
 from oekofen import OekofenWindow
+from heizung import HeizungWindow
 #from kodi import KodiWindow
 
 import threading
@@ -211,6 +212,14 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.oekofen.show()
         self.oekofen.raise_()
 
+    def openHeizung(self):
+        self.heizung =  HeizungWindow(self)
+        self.heizung.statusSignal.connect(self.setStatus)
+        self.heizung.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.heizung.move(0, 0)
+        self.heizung.show()
+        self.heizung.raise_()
+
 
     def __init__(self):
         self.mysqluser = 'heizung'
@@ -225,6 +234,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.pushButtonOpenRadioA.clicked.connect(self.openRadioA)
         self.pushButtonOpenAmpi.clicked.connect(self.openAmpi)
         self.pushButtonOpenOekofen.clicked.connect(self.openOekofen)
+        self.pushButtonOpenHeizung.clicked.connect(self.openHeizung)
         #self.pushButtonOpenKodi.clicked.connect(self.openKodi)
 
 

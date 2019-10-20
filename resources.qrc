@@ -27,6 +27,8 @@
         <file>gui/power.png</file>
         <file>gui/radiator_red.png</file>
         <file>gui/radiator.png</file>
+        <file>gui/home_eg.png</file>
+        <file>gui/home_dg.png</file>
     </qresource>
     <qresource prefix="/radiologos">
         <file>radiologos/starfm.jpg</file>
