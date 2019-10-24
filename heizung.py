@@ -160,7 +160,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         self.gridLayoutUnten.addWidget(lbl, line, 6)
 
     def init_screen(self):
-        self.gridLayoutUnten.setContentsMargins(5, 5, 5, 5)
+        self.gridLayoutUnten.setContentsMargins(0, 0, 0, 0)
         self.gridLayoutUnten.setHorizontalSpacing(10)
         self.gridLayoutUnten.setObjectName("gridLayoutUnten")
         while(self.gridLayoutUnten.count() > 0):
