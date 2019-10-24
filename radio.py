@@ -113,7 +113,6 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
         cmd = { "Aktion": aktion, "Parameter": par }
         json_cmd = json.dumps(cmd)
         ret = udpRemote(json_cmd, addr=self.radioConfig[2], port=self.radioConfig[3])
-        ret = (json.loads(ret))
         if 'Input' in ret:
             if ret['Input'] == -1:
                 ret['Input'] = "Geht net"

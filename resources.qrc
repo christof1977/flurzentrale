@@ -29,6 +29,7 @@
         <file>gui/radiator.png</file>
         <file>gui/home_eg.png</file>
         <file>gui/home_dg.png</file>
+        <file>gui/ventilation.png</file>
     </qresource>
     <qresource prefix="/radiologos">
         <file>radiologos/starfm.jpg</file>
