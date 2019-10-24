@@ -115,16 +115,19 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             pass
 
     def create_room(self, room, line):
+        font = QtGui.QFont(".SF NS Text", 16)
         # Display Room Name (first column)
         lbl = QLabel()
         lbl.setObjectName(room + "_name")
         lbl.setText(str(self.status[room]["Name"]))
         lbl.setStyleSheet("QLabel {color: white;}")
+        lbl.setFont(font)
         self.gridLayoutUnten.addWidget(lbl, line, 0)
         # Display Power Icon (second column)
         btn = QPushButton()
         btn.setObjectName(room + "_pwrBtn")
         btn.setIcon(QIcon(":/images/gui/power_green.png"))
+        btn.setMinimumSize(64,64)
         self.gridLayoutUnten.addWidget(btn, line, 1)
         #btn.clicked.connect(lambda: self.btn_click(room))
         # Display Thermometer (third column)
@@ -136,6 +139,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         lbl = QLabel()
         lbl.setObjectName(room + "_temp")
         lbl.setText(str(self.status[room]["isTemp"])+"°C")
+        lbl.setFont(font)
         lbl.setStyleSheet("QLabel {color: white;}")
         self.gridLayoutUnten.addWidget(lbl, line, 3)
         # Display On timer (5th column)
@@ -155,6 +159,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             text = str(self.status[room]["Shorttimer"])+"s"
         else:
             text = ""
+        lbl.setFont(font)
         lbl.setText(text)
         lbl.setStyleSheet("QLabel {color: white;}")
         self.gridLayoutUnten.addWidget(lbl, line, 6)
