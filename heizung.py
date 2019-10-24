@@ -75,15 +75,11 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
 
     def set_button(self, room):
         btn = self.get_btn_obj(room)
-        #print(btn)
         if(btn != -1):
             if(self.status[room]["Status"] == "on"):
                 self.set_btn_active(room)
-                #btn.setStyleSheet('QPushButton {background-color: green;} ')
-                #print("on")
             else:
                 self.set_btn_inactive(room)
-                #btn.setStyleSheet('QPushButton {background-color: black;} ')
 
     def update_btns(self):
         for room in self.status:
@@ -92,7 +88,6 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
                     self.set_btn_active(room)
                 else:
                     self.set_btn_inactive(room)
-        pass
 
     def create_lbl(self, room, col, text, position):
         print(room, col, position)
@@ -129,7 +124,6 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             w = item.widget()
             if w:
                 w.deleteLater()
-        #positions = [(i,j) for i in range(5) for j in range(3)]
         line_positions = [(i,j) for i in range(5) for j in range(1)]
         if(udpRemote('{"command" : "getAlive"}', addr=self.hz[self.floor]["host"], port=5005)["answer"] == "Freilich"):
             self.status = udpRemote('{"command" : "getStatus"}', addr=self.hz[self.floor]["host"], port=5005)

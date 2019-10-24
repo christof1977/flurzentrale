@@ -30,6 +30,10 @@
         <file>gui/home_eg.png</file>
         <file>gui/home_dg.png</file>
         <file>gui/ventilation.png</file>
+        <file>gui/timer_red.png</file>
+        <file>gui/thermometer_small.png</file>
+        <file>gui/timer_green.png</file>
+        <file>gui/power_green.png</file>
     </qresource>
     <qresource prefix="/radiologos">
         <file>radiologos/starfm.jpg</file>
