@@ -7,6 +7,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QDate, QTime, QDateTime, Qt, pyqtSignal, pyqtSlot, QSize
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
+from PyQt5.QtGui import QIcon, QPixmap
 
 import subprocess
 
@@ -102,7 +103,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         for i in range(self.gridLayoutUnten.count()):
             name = (self.gridLayoutUnten.itemAt(i).widget().objectName().split("_"))
             key = name[0]
-            print(name)
+            #print(name)
             if(key == "shorttimer"):
                 room = name[1]
                 if(self.status[room]["ShorttimerMode"] == "run"):
@@ -112,6 +113,51 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
                 self.gridLayoutUnten.itemAt(i).widget().setText(str(text))
         for room in self.status:
             pass
+
+    def create_room(self, room, line):
+        # Display Room Name (first column)
+        lbl = QLabel()
+        lbl.setObjectName(room + "_name")
+        lbl.setText(str(self.status[room]["Name"]))
+        lbl.setStyleSheet("QLabel {color: white;}")
+        self.gridLayoutUnten.addWidget(lbl, line, 0)
+        # Display Power Icon (second column)
+        btn = QPushButton()
+        btn.setObjectName(room + "_pwrBtn")
+        btn.setIcon(QIcon(":/images/gui/power_green.png"))
+        self.gridLayoutUnten.addWidget(btn, line, 1)
+        #btn.clicked.connect(lambda: self.btn_click(room))
+        # Display Thermometer (third column)
+        btn = QPushButton()
+        btn.setObjectName(room + "_thermBtn")
+        btn.setIcon(QIcon(":/images/gui/thermometer_small.png"))
+        self.gridLayoutUnten.addWidget(btn, line, 2)
+        # Display measured temperature (fourth column)
+        lbl = QLabel()
+        lbl.setObjectName(room + "_temp")
+        lbl.setText(str(self.status[room]["isTemp"])+"°C")
+        lbl.setStyleSheet("QLabel {color: white;}")
+        self.gridLayoutUnten.addWidget(lbl, line, 3)
+        # Display On timer (5th column)
+        btn = QPushButton()
+        btn.setObjectName(room + "_onTmrBtn")
+        btn.setIcon(QIcon(":/images/gui/timer_green.png"))
+        self.gridLayoutUnten.addWidget(btn, line, 4)
+        # Display Off timer (6th column)
+        btn = QPushButton()
+        btn.setObjectName(room + "_offTmrBtn")
+        btn.setIcon(QIcon(":/images/gui/timer_red.png"))
+        self.gridLayoutUnten.addWidget(btn, line, 5)
+        # Display remaining time (7th column)
+        lbl = QLabel()
+        lbl.setObjectName(room + "_shorttimer")
+        if(self.status[room]["ShorttimerMode"] == "run"):
+            text = str(self.status[room]["Shorttimer"])+"s"
+        else:
+            text = ""
+        lbl.setText(text)
+        lbl.setStyleSheet("QLabel {color: white;}")
+        self.gridLayoutUnten.addWidget(lbl, line, 6)
 
     def init_screen(self):
         self.gridLayoutUnten.setContentsMargins(5, 5, 5, 5)
@@ -131,11 +177,15 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             for room in self.status:
                 self.hz[self.floor]["rooms"].append(room)
             self.hz[self.floor]["rooms"] = sorted(self.hz[self.floor]["rooms"])
-            for position, room in zip(line_positions, self.hz[self.floor]["rooms"]):
-                self.create_btn(room, position)
-                text = self.status[room]["isTemp"]
-                self.create_lbl(room, "isTemp", text, tuple(map(sum, zip((0,1), position))))
-                self.create_lbl(room, "shorttimer", text, tuple(map(sum, zip((0,2), position))))
+            #for position, room in zip(line_positions, self.hz[self.floor]["rooms"]):
+            #    self.create_btn(room, position)
+            #    text = self.status[room]["isTemp"]
+            #    self.create_lbl(room, "isTemp", text, tuple(map(sum, zip((0,1), position))))
+            #    self.create_lbl(room, "shorttimer", text, tuple(map(sum, zip((0,2), position))))
+            i = 0
+            for room in self.hz[self.floor]["rooms"]:
+                self.create_room(room, i)
+                i += 1
 
 
 
