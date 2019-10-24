@@ -19,7 +19,7 @@ import syslog
 import datetime
 import json
 from kodijson import Kodi
-from libby import remoteAmpi
+from libby.remote import udpRemote
 
 from stations import radioStations
 
@@ -112,8 +112,8 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
     def send2ampi(self, aktion, par):
         cmd = { "Aktion": aktion, "Parameter": par }
         json_cmd = json.dumps(cmd)
-        ret = remoteAmpi.udpRemote(json_cmd, addr=self.radioConfig[2], port=self.radioConfig[3])
-        ret = (json.loads(ret))
+        ret = udpRemote(json_cmd, addr=self.radioConfig[2], port=self.radioConfig[3])
+        #ret = (json.loads(ret))
         if 'Input' in ret:
             if ret['Input'] == -1:
                 ret['Input'] = "Geht net"
