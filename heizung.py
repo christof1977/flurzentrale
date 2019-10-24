@@ -66,11 +66,11 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         btn = self.get_btn_obj(room)
         btn.setStyleSheet("QPushButton {color: white; border-style: solid; height: 25px; width: 60px; border-width: 1px; border-color: grey;}")
 
-    def get_btn_obj(self, room):
+    def get_btn_obj(self, name):
         ret = -1
         for i in range(self.gridLayoutUnten.count()):
             btn = self.gridLayoutUnten.itemAt(i).widget()
-            if(btn.objectName() == room):
+            if(btn.objectName() == name):
                 ret = btn
         return(ret)
 
@@ -115,7 +115,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             pass
 
     def create_room(self, room, line):
-        font = QtGui.QFont(".SF NS Text", 16)
+        font = QtGui.QFont(".SF NS Text", 12)
         # Display Room Name (first column)
         lbl = QLabel()
         lbl.setObjectName(room + "_name")
@@ -126,14 +126,17 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         # Display Power Icon (second column)
         btn = QPushButton()
         btn.setObjectName(room + "_pwrBtn")
-        btn.setIcon(QIcon(":/images/gui/power_green.png"))
-        btn.setMinimumSize(64,64)
+        btn.setIcon(QIcon(":/images/gui/power.png"))
+        btn.setIconSize(QSize(32,32))
+        btn.setMinimumSize(32,32)
         self.gridLayoutUnten.addWidget(btn, line, 1)
         #btn.clicked.connect(lambda: self.btn_click(room))
         # Display Thermometer (third column)
         btn = QPushButton()
         btn.setObjectName(room + "_thermBtn")
         btn.setIcon(QIcon(":/images/gui/thermometer_small.png"))
+        btn.setIconSize(QSize(32,32))
+        btn.setMinimumSize(32,32)
         self.gridLayoutUnten.addWidget(btn, line, 2)
         # Display measured temperature (fourth column)
         lbl = QLabel()
@@ -146,11 +149,15 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         btn = QPushButton()
         btn.setObjectName(room + "_onTmrBtn")
         btn.setIcon(QIcon(":/images/gui/timer_green.png"))
+        btn.setIconSize(QSize(32,32))
+        btn.setMinimumSize(32,32)
         self.gridLayoutUnten.addWidget(btn, line, 4)
         # Display Off timer (6th column)
         btn = QPushButton()
         btn.setObjectName(room + "_offTmrBtn")
         btn.setIcon(QIcon(":/images/gui/timer_red.png"))
+        btn.setIconSize(QSize(32,32))
+        btn.setMinimumSize(32,32)
         self.gridLayoutUnten.addWidget(btn, line, 5)
         # Display remaining time (7th column)
         lbl = QLabel()
@@ -163,6 +170,28 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         lbl.setText(text)
         lbl.setStyleSheet("QLabel {color: white;}")
         self.gridLayoutUnten.addWidget(lbl, line, 6)
+
+    def update_room(self, room):
+        #print("Updating",room)
+        #if(self.status[room]["Status"] != self.old_status[room]["Status"]):
+        if True:
+            if(self.status[room]["Status"] == "on"):
+                #print("on")
+                self.set_pwrBtn_on(room)
+            else:
+                #print("off")
+                self.set_pwrBtn_off(room)
+
+        pass
+
+
+    def set_pwrBtn_off(self, room):
+        btn = self.get_btn_obj(room + "_pwrBtn")
+        btn.setIcon(QIcon(":/images/gui/power.png"))
+
+    def set_pwrBtn_on(self, room):
+        btn = self.get_btn_obj(room + "_pwrBtn")
+        btn.setIcon(QIcon(":/images/gui/power_green.png"))
 
     def init_screen(self):
         self.gridLayoutUnten.setContentsMargins(0, 0, 0, 0)
@@ -236,8 +265,10 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             try:
                 self.old_status = self.status
                 self.status = udpRemote('{"command" : "getStatus"}', addr=self.hz[self.floor]["host"], port=5005)
-                self.update_btns()
-                self.update_lbls()
+                #self.update_btns()
+                #self.update_lbls()
+                for room in self.hz[self.floor]["rooms"]:
+                    self.update_room(room)
                 pass
             except Exception as e:
                 self.statusSignal.emit("Fehler "+ str(e))
