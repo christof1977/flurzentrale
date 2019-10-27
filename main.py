@@ -30,7 +30,7 @@ from libby.mysqldose import mysqldose
 
 import resources_rc
 
-garagn_tcp_addr = 'garagn.fritz.box'
+garagn_tcp_addr = 'garagn.local'
 garagn_tcp_port = 80
 buffer_size = 1024
 radioConfigW  = ["Wohnzimmer", "osmd", "osmd", 5005]
@@ -69,7 +69,6 @@ def json_dec(json_string):
         #print("Json-Fehler")
     return out
 
-
 #MainWindowUI, MainWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/mainwindow.ui'))
 MainWindowUI, MainWindowBase = loadUiType(resource_path('gui/mainwindow.ui'))
 
@@ -83,20 +82,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
     def hole_temp_db(self):
         self.labelTempDraussen.setText(str(self.db.read_one("OekoAussenTemp"))+"°C")
-#        self.labelTab1Temp1.setText(str(self.db.read_one("WohnzimmerTemp"))+"°C")
-#        self.labelTab1Temp2.setText(str(self.db.read_one("ArbeitszimmerTemp"))+"°C")
-#        self.labelTab1Temp3.setText(str("--- °C"))
-#        self.labelTab1Temp4.setText(str(self.db.read_one("TerrasseTemp"))+"°C")
-
-#        self.labelTab2Temp1.setText(str(self.db.read_one("LeahTemp"))+"°C")
-#        self.labelTab2Temp2.setText(str(self.db.read_one("FelixTemp"))+"°C")
-#        self.labelTab2Temp3.setText(str(self.db.read_one("BadDGTemp"))+"°C")
-#        self.labelTab2Temp4.setText(str("--- °C"))
-
-#        self.labelTab4Temp1.setText(str(round(self.db.read_one("kVorlauf"),1))+"°C")
-#        self.labelTab4Temp2.setText(str(round(self.db.read_one("kRuecklauf"),1))+"°C")
-#        self.labelTab4Temp3.setText(str(round(self.db.read_one("ntVorlaufDGTemp"),1))+"°C")
-#        self.labelTab4Temp4.setText(str(round(self.db.read_one("ntRuecklaufDGTemp"),1))+"°C")
 
     def update_temp(self):
         if(self.holetemp <= 5):
@@ -203,7 +188,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.kodi.show()
         self.kodi.raise_()
 
-
     def openOekofen(self):
         self.oekofen =  OekofenWindow(self)
         self.oekofen.statusSignal.connect(self.setStatus)
@@ -219,12 +203,13 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.heizung.move(0, 0)
         self.heizung.show()
         self.heizung.raise_()
+        self.heizung.checkStatus()
 
 
     def __init__(self):
         self.mysqluser = 'heizung'
         self.mysqlpass = 'heizung'
-        self.mysqlserv = 'dose.fritz.box'
+        self.mysqlserv = 'dose.local'
         self.mysqldb   = 'heizung'
         super(self.__class__, self).__init__()
         self.setupUi(self) # gets defined in the UI file
