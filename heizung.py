@@ -46,25 +46,26 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         self.floor = "EG"
         self.readConfig()
         self.tStop = threading.Event()
+        self.ping_controller()
         self.init_screen()
         self.update()
 
-    def create_btn(self, room, position):
-        print("Create btn", room)
-        btn = QPushButton()
-        btn.setObjectName(room)
-        btn.setText(room)
-        self.gridLayoutUnten.addWidget(btn, *position)
-        btn.clicked.connect(lambda: self.btn_click(room))
-        self.set_button(room)
+    def ping_controller(self):
+        p = subprocess.Popen(['ping',self.hz[self.floor]["host"],'-c','1',"-W","2"])
+        p.wait()
+        self.stat = 1
+        if(p.poll() == 0): #Hier gehts weiter, wenn ping erfolgreich war
+            self.stat = 0
+            return()
+        else: # Hier lang ohne erfolgreichen ping
+            self.statusSignal.emit("Keine Antwort")
+            self.stat = 1
+            print("nix is!")
 
-    def set_btn_active(self, room):
-        btn = self.get_btn_obj(room)
-        btn.setStyleSheet("QPushButton {color: white; border-style: solid; height: 25px; width: 60px; border-width: 1px; border-color: grey; background-color: green}")
-
-    def set_btn_inactive(self, room):
-        btn = self.get_btn_obj(room)
-        btn.setStyleSheet("QPushButton {color: white; border-style: solid; height: 25px; width: 60px; border-width: 1px; border-color: grey;}")
+    def checkStatus(self):
+        #print(self.stat)
+        if(self.stat):
+            self.home()
 
     def get_btn_obj(self, name):
         ret = -1
@@ -74,59 +75,36 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
                 ret = btn
         return(ret)
 
-    def set_button(self, room):
-        btn = self.get_btn_obj(room)
-        if(btn != -1):
-            if(self.status[room]["Status"] == "on"):
-                self.set_btn_active(room)
-            else:
-                self.set_btn_inactive(room)
-
-    def update_btns(self):
-        for room in self.status:
-            if(self.status[room]["Status"] != self.old_status[room]["Status"]):
-                if(self.status[room]["Status"] == "on"):
-                    self.set_btn_active(room)
-                else:
-                    self.set_btn_inactive(room)
-
-    def create_lbl(self, room, col, text, position):
-        print(room, col, position)
-        lbl = QLabel()
-        lbl.setObjectName(col+"_"+room)
-        lbl.setText(str(text))
-        lbl.setStyleSheet("QLabel {color: white;}")
-        self.gridLayoutUnten.addWidget(lbl, *position)
-
-
-    def update_lbls(self):
-        for i in range(self.gridLayoutUnten.count()):
-            name = (self.gridLayoutUnten.itemAt(i).widget().objectName().split("_"))
-            key = name[0]
-            #print(name)
-            if(key == "shorttimer"):
-                room = name[1]
-                if(self.status[room]["ShorttimerMode"] == "run"):
-                    text = self.status[room]["Shorttimer"]
-                else:
-                    text = ""
-                self.gridLayoutUnten.itemAt(i).widget().setText(str(text))
-        for room in self.status:
-            pass
-
     def create_room(self, room, line):
+        btnStyleSheet = ("QPushButton {" +
+                                      "color: rgb(255, 255, 255);" +
+                                      "background-color: rgb(0, 0,0);" +
+                                      "border-color: rgb(40, 40, 40);" +
+                                      "border-radius: 4px;" +
+                                     "} " +
+                          "QPushButton:pressed {" +
+                                       "background-color: rgb(60,60,60)" +
+                                      "}")
+        #print("Building Screen")
         font = QtGui.QFont(".SF NS Text", 12)
         # Display Room Name (first column)
-        lbl = QLabel()
-        lbl.setObjectName(room + "_name")
-        lbl.setText(str(self.status[room]["Name"]))
-        lbl.setStyleSheet("QLabel {color: white;}")
-        lbl.setFont(font)
-        self.gridLayoutUnten.addWidget(lbl, line, 0)
+        #lbl = QLabel()
+        #lbl.setObjectName(room + "_name")
+        #lbl.setText(str(self.status[room]["Name"]))
+        #lbl.setStyleSheet("QLabel {color: white;}")
+        #lbl.setFont(font)
+        #self.gridLayoutUnten.addWidget(lbl, line, 0)
+        btn = QPushButton()
+        btn.setObjectName(room + "_name")
+        btn.setText(str(self.status[room]["Name"]))
+        btn.setStyleSheet(btnStyleSheet)
+        btn.setMinimumSize(32,32)
+        self.gridLayoutUnten.addWidget(btn, line, 0)
         # Display Power Icon (second column)
         btn = QPushButton()
         btn.setObjectName(room + "_pwrBtn")
         btn.setIcon(QIcon(":/images/gui/power.png"))
+        btn.setStyleSheet(btnStyleSheet)
         btn.setIconSize(QSize(32,32))
         btn.setMinimumSize(32,32)
         self.gridLayoutUnten.addWidget(btn, line, 1)
@@ -149,16 +127,20 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         btn = QPushButton()
         btn.setObjectName(room + "_onTmrBtn")
         btn.setIcon(QIcon(":/images/gui/timer_green.png"))
+        btn.setStyleSheet(btnStyleSheet)
         btn.setIconSize(QSize(32,32))
         btn.setMinimumSize(32,32)
         self.gridLayoutUnten.addWidget(btn, line, 4)
+        btn.clicked.connect(lambda: self.set_shorttimer(room, "on"))
         # Display Off timer (6th column)
         btn = QPushButton()
         btn.setObjectName(room + "_offTmrBtn")
         btn.setIcon(QIcon(":/images/gui/timer_red.png"))
+        btn.setStyleSheet(btnStyleSheet)
         btn.setIconSize(QSize(32,32))
         btn.setMinimumSize(32,32)
         self.gridLayoutUnten.addWidget(btn, line, 5)
+        btn.clicked.connect(lambda: self.set_shorttimer(room, "off"))
         # Display remaining time (7th column)
         lbl = QLabel()
         lbl.setObjectName(room + "_shorttimer")
@@ -171,6 +153,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         lbl.setStyleSheet("QLabel {color: white;}")
         self.gridLayoutUnten.addWidget(lbl, line, 6)
 
+
     def update_room(self, room):
         #print("Updating",room)
         #if(self.status[room]["Status"] != self.old_status[room]["Status"]):
@@ -181,9 +164,6 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             else:
                 #print("off")
                 self.set_pwrBtn_off(room)
-
-        pass
-
 
     def set_pwrBtn_off(self, room):
         btn = self.get_btn_obj(room + "_pwrBtn")
@@ -197,6 +177,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         self.gridLayoutUnten.setContentsMargins(0, 0, 0, 0)
         self.gridLayoutUnten.setHorizontalSpacing(10)
         self.gridLayoutUnten.setObjectName("gridLayoutUnten")
+        # Delete all widgets in Layout, if existing (cleaning layout)
         while(self.gridLayoutUnten.count() > 0):
             item = self.gridLayoutUnten.takeAt(0)
             if not item:
@@ -205,26 +186,38 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             if w:
                 w.deleteLater()
         line_positions = [(i,j) for i in range(5) for j in range(1)]
-        if(udpRemote('{"command" : "getAlive"}', addr=self.hz[self.floor]["host"], port=5005)["answer"] == "Freilich"):
-            self.status = udpRemote('{"command" : "getStatus"}', addr=self.hz[self.floor]["host"], port=5005)
+        ans= udpRemote('{"command" : "getAlive"}', addr=self.hz[self.floor]["host"], port=5005)
+        print(ans)
+        if(ans == -1):
+            print("Mist")
+            self.statusSignal.emit("Keine Antwort")
+            self.home()
+            return(-1)
+        alive = ans["answer"]
+        if(alive == "Freilich"):
+            #self.status = udpRemote('{"command" : "getStatus"}', addr=self.hz[self.floor]["host"], port=5005)
+            self.get_status()
             self.hz[self.floor]["rooms"] = []
             for room in self.status:
                 self.hz[self.floor]["rooms"].append(room)
             self.hz[self.floor]["rooms"] = sorted(self.hz[self.floor]["rooms"])
-            #for position, room in zip(line_positions, self.hz[self.floor]["rooms"]):
-            #    self.create_btn(room, position)
-            #    text = self.status[room]["isTemp"]
-            #    self.create_lbl(room, "isTemp", text, tuple(map(sum, zip((0,1), position))))
-            #    self.create_lbl(room, "shorttimer", text, tuple(map(sum, zip((0,2), position))))
             i = 0
             for room in self.hz[self.floor]["rooms"]:
                 self.create_room(room, i)
                 i += 1
+            self.update_status()
+        return()
 
-
+    def set_shorttimer(self, room, mode):
+        self.get_status()
+        if(self.status[room]["Mode"] == mode):
+            print(cmd)
+            print(room)
+            print(mode)
 
     def selectEg(self):
         self.floor = "EG"
+        #self.ping_controller()
         self.init_screen()
         print(self.floor)
 
@@ -260,24 +253,26 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         self.tStop.set()
         self.close()
 
+    def get_status(self):
+        self.status = udpRemote('{"command" : "getStatus"}', addr=self.hz[self.floor]["host"], port=5005)
+
+    def update_status(self):
+        self.old_status = self.status
+        self.get_status()
+        #print("update")
+        for room in self.hz[self.floor]["rooms"]:
+            self.update_room(room)
+
     def _update(self):
         while(not self.tStop.is_set()):
             try:
-                self.old_status = self.status
-                self.status = udpRemote('{"command" : "getStatus"}', addr=self.hz[self.floor]["host"], port=5005)
-                #self.update_btns()
-                #self.update_lbls()
-                for room in self.hz[self.floor]["rooms"]:
-                    self.update_room(room)
-                pass
+                self.update_status()
             except Exception as e:
                 self.statusSignal.emit("Fehler "+ str(e))
                 print(str(e))
             self.tStop.wait(5)
 
-
     def update(self):
-
         updateT = threading.Thread(target=self._update)
         updateT.setDaemon(True)
         updateT.start()
