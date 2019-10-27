@@ -22,6 +22,7 @@ import json
 import urllib
 import urllib.request
 import configparser
+from roomdetail import RoomDetailWindow
 
 #from libby import remote
 from libby.remote import udpRemote
@@ -99,6 +100,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         btn.setText(str(self.status[room]["Name"]))
         btn.setStyleSheet(btnStyleSheet)
         btn.setMinimumSize(32,32)
+        btn.clicked.connect(lambda: self.roomdetail(room))
         self.gridLayoutUnten.addWidget(btn, line, 0)
         # Display Power Icon (second column)
         btn = QPushButton()
@@ -153,6 +155,12 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         lbl.setStyleSheet("QLabel {color: white;}")
         self.gridLayoutUnten.addWidget(lbl, line, 6)
 
+    def roomdetail(self, room):
+        self.detailwin =  RoomDetailWindow(self, room)
+        self.detailwin.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.detailwin.move(0, 0)
+        self.detailwin.show()
+        self.detailwin.raise_()
 
     def update_room(self, room):
         #print("Updating",room)
