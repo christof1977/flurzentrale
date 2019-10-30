@@ -68,13 +68,14 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         if(self.stat):
             self.home()
 
-    def get_btn_obj(self, name):
+    def get_obj(self, name):
         ret = -1
         for i in range(self.gridLayoutUnten.count()):
             btn = self.gridLayoutUnten.itemAt(i).widget()
             if(btn.objectName() == name):
                 ret = btn
         return(ret)
+
 
     def create_room(self, room, line):
         btnStyleSheet = ("QPushButton {" +
@@ -147,7 +148,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         lbl = QLabel()
         lbl.setObjectName(room + "_shorttimer")
         if(self.status[room]["ShorttimerMode"] == "run"):
-            text = str(self.status[room]["Shorttimer"])+"s"
+            text = str(int(self.status[room]["Shorttimer"]/60))+" min"
         else:
             text = ""
         lbl.setFont(font)
@@ -172,13 +173,21 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             else:
                 #print("off")
                 self.set_pwrBtn_off(room)
+            lbl = self.get_obj(room + "_temp")
+            lbl.setText(str(self.status[room]["isTemp"])+"°C")
+            lbl = self.get_obj(room + "_shorttimer")
+            if(self.status[room]["ShorttimerMode"] == "run"):
+                text = str(int(self.status[room]["Shorttimer"]/60))+" min"
+            else:
+                text = ""
+            lbl.setText(text)
 
     def set_pwrBtn_off(self, room):
-        btn = self.get_btn_obj(room + "_pwrBtn")
+        btn = self.get_obj(room + "_pwrBtn")
         btn.setIcon(QIcon(":/images/gui/power.png"))
 
     def set_pwrBtn_on(self, room):
-        btn = self.get_btn_obj(room + "_pwrBtn")
+        btn = self.get_obj(room + "_pwrBtn")
         btn.setIcon(QIcon(":/images/gui/power_green.png"))
 
     def init_screen(self):
@@ -217,11 +226,16 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         return()
 
     def set_shorttimer(self, room, mode):
+        timer_val = 300
         self.get_status()
-        if(self.status[room]["Mode"] == mode):
-            print(cmd)
-            print(room)
-            print(mode)
+        old_timer_val = int(self.status[room]["Shorttimer"])
+        if(self.status[room]["Mode"] == "auto" or self.status[room]["Mode"] == mode):
+            cmd = {"command" : "setRoomShortTimer", "Room" : room, "Mode" : mode, "Time" : timer_val + old_timer_val}
+            ret = self.send_cmd(cmd)
+        else:
+            cmd = {"command" : "setRoomShortTimer", "Room" : room, "Mode" : "auto", "Time" : 0}
+            ret = self.send_cmd(cmd)
+
 
     def selectEg(self):
         self.floor = "EG"
@@ -263,6 +277,11 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
 
     def get_status(self):
         self.status = udpRemote('{"command" : "getStatus"}', addr=self.hz[self.floor]["host"], port=5005)
+
+    def send_cmd(self, cmd):
+        #print("Sending", cmd)
+        ret = udpRemote(json.dumps(cmd), addr=self.hz[self.floor]["host"], port=5005)
+        return(ret)
 
     def update_status(self):
         self.old_status = self.status
