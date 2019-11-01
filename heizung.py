@@ -204,8 +204,8 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
                 w.deleteLater()
         line_positions = [(i,j) for i in range(5) for j in range(1)]
         ans= udpRemote('{"command" : "getAlive"}', addr=self.hz[self.floor]["host"], port=5005)
-        print(ans)
-        if(ans == -1):
+        print("Ans", ans)
+        if(ans == -1 or ans is None):
             print("Mist")
             self.statusSignal.emit("Keine Antwort")
             self.home()
@@ -235,6 +235,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         else:
             cmd = {"command" : "setRoomShortTimer", "Room" : room, "Mode" : "auto", "Time" : 0}
             ret = self.send_cmd(cmd)
+        self.update_status()
 
 
     def selectEg(self):
