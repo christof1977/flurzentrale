@@ -82,7 +82,7 @@ class RoomDetailWindow(RoomDetailWindowBase, RoomDetailWindowUI):
             w = item.widget()
             if w:
                 w.deleteLater()
-        locale.setlocale(locale.LC_ALL, 'de_DE')
+        locale.setlocale(locale.LC_ALL, '')
         days = list(calendar.day_name)
         j = 0
         for day in self.timer:
