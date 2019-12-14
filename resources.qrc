@@ -48,6 +48,8 @@
         <file>radiologos/bayern1.png</file>
         <file>radiologos/bayern2.png</file>
         <file>radiologos/afkmax.png</file>
+        <file>radiologos/allzicblues.png</file>
+        <file>radiologos/allzicjazzsoul.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
