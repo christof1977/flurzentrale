@@ -66,7 +66,6 @@ class AmpiWindow(AmpiWindowBase, AmpiWindowUI):
         json_cmd = json.dumps(cmd)
         ret = udpRemote(json_cmd, addr=self.ampiConfig[2], port=self.ampiConfig[3])
         if(ret != -1):
-            ret = (json.loads(ret))
             for key in ret.items():
                 print(key)
             self.statusSignal.emit(ret['Antwort'] + ": " + par)

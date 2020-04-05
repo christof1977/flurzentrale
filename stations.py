@@ -9,7 +9,10 @@ radioStations = {   "Radio Gong"        : ["http://webstream.gong971.de/gong971"
                     "Audiophile Jazz"   : ["http://8.38.78.173:8210/stream/1/",":/radiologos/radiologos/audiophile_jazz.png"],
                     "Radio BUH"         : ["http://streaming.radio.co/saed08c46d/listen",":/radiologos/radiologos/radio-buh.png"],
                     "Afk max"           : ["http://stream.afkmax.de/afkmax-hq.mp3",":/radiologos/radiologos/afkmax.png"],
-                    "Jazztime Nürnberg" : ["http://webradio.radiof.de:8000/radiof",":/radiologos/radiologos/jazztime_nbg.png"]
+                    "Jazztime Nürnberg" : ["http://webradio.radiof.de:8000/radiof",":/radiologos/radiologos/jazztime_nbg.png"],
+                    "Allzic Blues"      : ["http://allzic09.ice.infomaniak.ch/allzic09.mp3",":/radiologos/radiologos/allzicblues.png"],
+                    "Allzic Jazz & Soul": ["http://jazzradio.ice.infomaniak.ch/jazzradio-high.mp3",":/radiologos/radiologos/allzicjazzsoul.png"]
+
 }
 
 

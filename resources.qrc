@@ -25,6 +25,15 @@
         <file>gui/oekofen_logo.png</file>
         <file>gui/kodi.png</file>
         <file>gui/power.png</file>
+        <file>gui/radiator_red.png</file>
+        <file>gui/radiator.png</file>
+        <file>gui/home_eg.png</file>
+        <file>gui/home_dg.png</file>
+        <file>gui/ventilation.png</file>
+        <file>gui/timer_red.png</file>
+        <file>gui/thermometer_small.png</file>
+        <file>gui/timer_green.png</file>
+        <file>gui/power_green.png</file>
     </qresource>
     <qresource prefix="/radiologos">
         <file>radiologos/starfm.jpg</file>
@@ -39,5 +48,8 @@
         <file>radiologos/bayern1.png</file>
         <file>radiologos/bayern2.png</file>
         <file>radiologos/afkmax.png</file>
+        <file>radiologos/allzicblues.png</file>
+        <file>radiologos/allzicjazzsoul.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>
