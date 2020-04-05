@@ -90,7 +90,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.hole_temp_db()
             self.holetemp = 0
 
-
     def update_torstatus(self):
         if(self.schaunach == 5):
             json_cmd = '{"Aktion" : "Abfrage", "Parameter" : "Torstatus"}\n'
@@ -107,7 +106,17 @@ class MainWindow(MainWindowBase, MainWindowUI):
         else:
             self.schaunach += 1
 
+    def getRoomTemp(self, room):
+        return("T")
+
+    def getRoomPressure(self, room):
+        return("P")
+
+    def getRoomHumidity(self, room):
+        return("H")
+
     def _uhr(self):
+        counter = 0
         while(not self.t_stop.is_set()):
             now=datetime.datetime.now()
             if self.uhrzeitdp == 1:
@@ -129,6 +138,14 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.labelDate.setText(str(now.day).zfill(2)+'.'+str(now.month).zfill(2)+'.'+str(now.year))
             self.update_torstatus()
             self.update_temp()
+
+            if(counter < 9):
+                counter += 1
+            else:
+                counter = 0
+                self.labelWzTemp.setText(self.getRoomTemp("Wz"))
+                self.labelWzPress.setText(self.getRoomPressure("Wz"))
+                self.labelWzHum.setText(self.getRoomHumidity("Wz"))
             self.t_stop.wait(1)
 
 
