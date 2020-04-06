@@ -27,6 +27,7 @@ from kodijson import Kodi
 
 from libby import mysqldose
 from libby.mysqldose import mysqldose
+from libby.remote import udpRemote
 
 import resources_rc
 
@@ -107,13 +108,34 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.schaunach += 1
 
     def getRoomTemp(self, room):
-        return("T")
+        try:
+            ret = udpRemote('{"command":"getTemperature"}\n', addr=self.bmehost, port=self.bmeport)
+        except:
+            ret = {"value":"-1"}
+        if("value" in ret):
+            return(ret)
+        else:
+            return({"value":"-1"})
 
     def getRoomPressure(self, room):
-        return("P")
+        try:
+            ret = udpRemote('{"command":"getPressure"}\n', addr=self.bmehost, port=self.bmeport)
+        except:
+            ret = {"value":"-1"}
+        if("value" in ret):
+            return(ret)
+        else:
+            return({"value":"-1"})
 
     def getRoomHumidity(self, room):
-        return("H")
+        try:
+            ret = udpRemote('{"command":"getHumidity"}\n', addr=self.bmehost, port=self.bmeport)
+        except:
+            ret = {"value":"-1"}
+        if("value" in ret):
+            return(ret)
+        else:
+            return({"value":"-1"})
 
     def _uhr(self):
         counter = 0
@@ -139,13 +161,13 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.update_torstatus()
             self.update_temp()
 
-            if(counter < 9):
+            if(counter < 59):
                 counter += 1
             else:
                 counter = 0
-                self.labelWzTemp.setText(self.getRoomTemp("Wz"))
-                self.labelWzPress.setText(self.getRoomPressure("Wz"))
-                self.labelWzHum.setText(self.getRoomHumidity("Wz"))
+                self.labelWzTemp.setText(self.getRoomTemp("Wz")["value"])
+                self.labelWzPress.setText(self.getRoomPressure("Wz")["value"])
+                self.labelWzHum.setText(self.getRoomHumidity("Wz")["value"])
             self.t_stop.wait(1)
 
 
@@ -159,7 +181,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
         uhrTh.start()
 
     def torAufZu(self):
-        print("Tor")
         #time.sleep(.5)
         json_cmd = '{"Aktion" : "Kommando", "Parameter" : "TorAufZu"}\n'
         self.labelStatus.setText("Warte kurz")
@@ -228,6 +249,10 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.mysqlpass = 'heizung'
         self.mysqlserv = 'dose.local'
         self.mysqldb   = 'heizung'
+
+        self.bmehost = "heizungeg.local"
+        self.bmeport = 5023
+
         super(self.__class__, self).__init__()
         self.setupUi(self) # gets defined in the UI file
 
@@ -249,6 +274,9 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.db.start()
         self.hole_temp_db()
 
+        self.labelWzTemp.setText(self.getRoomTemp("Wz")["value"])
+        self.labelWzPress.setText(self.getRoomPressure("Wz")["value"])
+        self.labelWzHum.setText(self.getRoomHumidity("Wz")["value"])
 
 
 def main():
