@@ -31,6 +31,7 @@ SOURCES += \
         ampi.py \
         oekofen.py \
         heizung.py \
+        roomdetail.py \
         libby/README.md \
         libby/__init__.py \
         libby/logger.py \
@@ -41,6 +42,7 @@ SOURCES += \
         libby/remote.py \
 
 FORMS += \
+    gui/detailwindow.ui \
     gui/mainwindow.ui \
     gui/radiowindow.ui \
     gui/ampiwindow.ui \
@@ -52,7 +54,9 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \ \
+DISTFILES += \ \ \
+    heizung_kopie.py \
+    heizung_kopie1.py
 
 
     
