@@ -112,7 +112,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
             ret = udpRemote('{"command":"getTemperature"}\n', addr=self.bmehost, port=self.bmeport)
         except:
             ret = {"value":"-1"}
-        if("value" in ret):
+        if(ret is not None and "value" in ret):
             return(ret)
         else:
             return({"value":"-1"})
@@ -122,7 +122,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
             ret = udpRemote('{"command":"getPressure"}\n', addr=self.bmehost, port=self.bmeport)
         except:
             ret = {"value":"-1"}
-        if("value" in ret):
+        if(ret is not None and "value" in ret):
             return(ret)
         else:
             return({"value":"-1"})
@@ -132,7 +132,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
             ret = udpRemote('{"command":"getHumidity"}\n', addr=self.bmehost, port=self.bmeport)
         except:
             ret = {"value":"-1"}
-        if("value" in ret):
+        if(ret is not None and "value" in ret):
             return(ret)
         else:
             return({"value":"-1"})
