@@ -65,7 +65,7 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
 
 
     def startRadio(self, parent):
-        p = subprocess.Popen(['ping',self.radioConfig[1],'-c','1',"-W","2"])
+        p = subprocess.Popen(['ping',self.radioConfig[1],'-c','2',"-W","5"])
         p.wait()
         if(p.poll() == 0): #Hier gehts weiter, wenn ping erfolgreich war
             try:
