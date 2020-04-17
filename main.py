@@ -34,8 +34,8 @@ import resources_rc
 garagn_tcp_addr = 'garagn.local'
 garagn_tcp_port = 80
 buffer_size = 1024
-radioConfigW  = ["Wohnzimmer", "osmd", "osmd", 5005]
-radioConfigA  = ["Arbeitszimmmer", "osme", None, None]
+radioConfigW  = ["Wohnzimmer", "osmd.local", "osmd", 5005]
+radioConfigA  = ["Arbeitszimmmer", "osme.local", None, None]
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -110,9 +110,14 @@ class MainWindow(MainWindowBase, MainWindowUI):
     def getRoomTemp(self, room):
         try:
             ret = udpRemote('{"command":"getTemperature"}\n', addr=self.bmehost, port=self.bmeport)
+            if(ret==-1):
+                print("Not in Exception, ret= ",ret)
+                ret = {"value":"-1"}
         except:
             ret = {"value":"-1"}
-        if(ret is not None and "value" in ret):
+            print("In Exception: ret= ",ret)
+            return({"value":"-1"})
+        if(ret is not None and is not -1 and "value" in ret):
             return(ret)
         else:
             return({"value":"-1"})
@@ -161,7 +166,8 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.update_torstatus()
             self.update_temp()
 
-            if(counter < 59):
+            #if(counter < 59):
+            if(counter < 5):
                 counter += 1
             else:
                 counter = 0
