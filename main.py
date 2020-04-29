@@ -108,39 +108,37 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.schaunach += 1
 
     def getRoomTemp(self, room):
-        try:
-            ret = udpRemote('{"command":"getTemperature"}\n', addr=self.bmehost, port=self.bmeport)
-            if(ret==-1):
-                print("Not in Exception, ret= ",ret)
-                ret = {"value":"-1"}
-        except:
-            ret = {"value":"-1"}
-            print("In Exception: ret= ",ret)
-            return({"value":"-1"})
-        if(ret is not None and is not -1 and "value" in ret):
+        ret = udpRemote('{"command":"getTemperature"}\n', addr=self.bmehost, port=self.bmeport)
+        try: #if ret is an iterable object, except return error message
+            iter(ret)
+            #print("In try: ret=",ret)
             return(ret)
-        else:
-            return({"value":"-1"})
+        except Exception as e:
+            ret = {"value":"Internal error: " + str(e)}
+            #print("In try: ret=",ret)
+            return(ret)
 
     def getRoomPressure(self, room):
-        try:
-            ret = udpRemote('{"command":"getPressure"}\n', addr=self.bmehost, port=self.bmeport)
-        except:
-            ret = {"value":"-1"}
-        if(ret is not None and "value" in ret):
+        ret = udpRemote('{"command":"getPressure"}\n', addr=self.bmehost, port=self.bmeport)
+        try: #if ret is an iterable object, except return error message
+            iter(ret)
+            #print("In try: ret=",ret)
             return(ret)
-        else:
-            return({"value":"-1"})
+        except Exception as e:
+            ret = {"value":"Internal error: " + str(e)}
+            #print("In try: ret=",ret)
+            return(ret)
 
     def getRoomHumidity(self, room):
-        try:
-            ret = udpRemote('{"command":"getHumidity"}\n', addr=self.bmehost, port=self.bmeport)
-        except:
-            ret = {"value":"-1"}
-        if(ret is not None and "value" in ret):
+        ret = udpRemote('{"command":"getHumidity"}\n', addr=self.bmehost, port=self.bmeport)
+        try: #if ret is an iterable object, except return error message
+            iter(ret)
+            #print("In try: ret=",ret)
             return(ret)
-        else:
-            return({"value":"-1"})
+        except Exception as e:
+            ret = {"value":"Internal error: " + str(e)}
+            #print("In try: ret=",ret)
+            return(ret)
 
     def _uhr(self):
         counter = 0
@@ -166,8 +164,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.update_torstatus()
             self.update_temp()
 
-            #if(counter < 59):
-            if(counter < 5):
+            if(counter < 59):
                 counter += 1
             else:
                 counter = 0
