@@ -65,11 +65,13 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
 
 
     def startRadio(self, parent):
-        p = subprocess.Popen(['ping',self.radioConfig[1],'-c','2',"-W","5"])
+        p = subprocess.Popen(['ping',self.radioConfig[1],'-c','2',"-W","25"])
         p.wait()
         if(p.poll() == 0): #Hier gehts weiter, wenn ping erfolgreich war
             try:
+                print("Opening connection to ", self.radioConfig[1])
                 self.kodi = Kodi("http://"+self.radioConfig[1]+"/jsonrpc")
+                print("Connection established")
                 print(self.kodi.JSONRPC.Ping())
                 self.labelTitle.setText("Radio "+self.radioConfig[0])
             except:
@@ -153,6 +155,3 @@ class RadioWindow(RadioWindowBase, RadioWindowUI):
     def home(self):
         self.hide()
         #self.close()
-
-
-
