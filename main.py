@@ -168,9 +168,12 @@ class MainWindow(MainWindowBase, MainWindowUI):
                 counter += 1
             else:
                 counter = 0
-                self.labelWzTemp.setText(self.getRoomTemp("Wz")["value"])
-                self.labelWzPress.setText(self.getRoomPressure("Wz")["value"])
-                self.labelWzHum.setText(self.getRoomHumidity("Wz")["value"])
+                try:
+                    self.labelWzTemp.setText(self.getRoomTemp("Wz")["value"])
+                    self.labelWzPress.setText(self.getRoomPressure("Wz")["value"])
+                    self.labelWzHum.setText(self.getRoomHumidity("Wz")["value"])
+                except:
+                    pass
             self.t_stop.wait(1)
 
 
@@ -277,9 +280,12 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.db.start()
         self.hole_temp_db()
 
-        self.labelWzTemp.setText(self.getRoomTemp("Wz")["value"])
-        self.labelWzPress.setText(self.getRoomPressure("Wz")["value"])
-        self.labelWzHum.setText(self.getRoomHumidity("Wz")["value"])
+        try:
+            self.labelWzTemp.setText(self.getRoomTemp("Wz")["value"])
+            self.labelWzPress.setText(self.getRoomPressure("Wz")["value"])
+            self.labelWzHum.setText(self.getRoomHumidity("Wz")["value"])
+        except:
+            pass
 
 
 def main():
