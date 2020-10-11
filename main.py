@@ -82,16 +82,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.labelStatusTime = 0
         self.labelStatus.setText(msg)
 
-    def hole_temp_db(self):
-        self.labelTempDraussen.setText(str(self.db.read_one("OekoAussenTemp"))+"°C")
-
-    def update_temp(self):
-        if(self.holetemp <= 5):
-            self.holetemp += 1
-        else:
-            self.hole_temp_db()
-            self.holetemp = 0
-
     def update_torstatus(self):
         if(self.schaunach == 5):
             json_cmd = '{"Aktion" : "Abfrage", "Parameter" : "Torstatus"}\n'
@@ -108,41 +98,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
         else:
             self.schaunach += 1
 
-
-
-    #def getRoomTemp(self, room):
-    #    ret = udpRemote('{"command":"getTemperature"}\n', addr=self.bmehost, port=self.bmeport)
-    #    try: #if ret is an iterable object, except return error message
-    #        iter(ret)
-    #        #print("In try: ret=",ret)
-    #        return(ret)
-    #    except Exception as e:
-    #        ret = {"value":"Internal error: " + str(e)}
-    #        #print("In try: ret=",ret)
-    #        return(ret)
-
-    #def getRoomPressure(self, room):
-    #    ret = udpRemote('{"command":"getPressure"}\n', addr=self.bmehost, port=self.bmeport)
-    #    try: #if ret is an iterable object, except return error message
-    #        iter(ret)
-    #        #print("In try: ret=",ret)
-    #        return(ret)
-    #    except Exception as e:
-    #        ret = {"value":"Internal error: " + str(e)}
-    #        #print("In try: ret=",ret)
-    #        return(ret)
-
-    #def getRoomHumidity(self, room):
-    #    ret = udpRemote('{"command":"getHumidity"}\n', addr=self.bmehost, port=self.bmeport)
-    #    try: #if ret is an iterable object, except return error message
-    #        iter(ret)
-    #        #print("In try: ret=",ret)
-    #        return(ret)
-    #    except Exception as e:
-    #        ret = {"value":"Internal error: " + str(e)}
-    #        #print("In try: ret=",ret)
-    #        return(ret)
-
     def udpRx(self):
         self.udpRxTstop = threading.Event()
         rxValT = threading.Thread(target=self._udpRx)
@@ -158,7 +113,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
         udpclient.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         udpclient.bind(("", port))
         udpclient.setblocking(0)
-
         while(not self.udpRxTstop.is_set()):
             ready = select.select([udpclient], [], [], .1)
             if ready[0]:
@@ -179,6 +133,8 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.labelWzHum.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
         elif(key == "pressFlur"):
             self.labelWzPress.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
+        elif(key == "tempOekoAussen"):
+            self.labelTempDraussen.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
 
 
 
@@ -187,11 +143,9 @@ class MainWindow(MainWindowBase, MainWindowUI):
         while(not self.t_stop.is_set()):
             now=datetime.datetime.now()
             if self.uhrzeitdp == 1:
-                #uhrzeit=str(now.hour)+" "+str(now.minute)
                 uhrzeit="{0:0>2}".format(now.hour)+" "+"{0:0>2}".format(now.minute)
                 self.uhrzeitdp = 0
             else:
-                #uhrzeit=str(now.hour)+":"+str(now.minute)
                 uhrzeit="{0:0>2}".format(now.hour)+":"+"{0:0>2}".format(now.minute)
                 self.uhrzeitdp = 1
 
@@ -204,7 +158,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.labelTime.setText(uhrzeit)
             self.labelDate.setText(str(now.day).zfill(2)+'.'+str(now.month).zfill(2)+'.'+str(now.year))
             self.update_torstatus()
-            self.update_temp()
+            #self.update_temp()
 
             if(counter < 59):
                 counter += 1
@@ -223,7 +177,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.labelStatusTime = 3
         self.uhrzeitdp = 1
         self.schaunach = 0
-        self.holetemp = 0
         uhrTh = threading.Thread(target=self._uhr)
         uhrTh.setDaemon(True)
         uhrTh.start()
@@ -321,15 +274,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.db = mysqldose(self.mysqluser, self.mysqlpass, self.mysqlserv, self.mysqldb)
         #self.mysql_success = False
         self.db.start()
-        self.hole_temp_db()
-
-        try:
-            self.labelWzTemp.setText(self.getRoomTemp("Wz")["value"])
-            self.labelWzPress.setText(self.getRoomPressure("Wz")["value"])
-            self.labelWzHum.setText(self.getRoomHumidity("Wz")["value"])
-        except:
-            pass
-
+        #self.hole_temp_db()
 
 def main():
     import platform
