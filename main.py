@@ -23,6 +23,7 @@ import sys
 import syslog
 import datetime
 import json
+import select
 from kodijson import Kodi
 
 from libby import mysqldose
@@ -107,38 +108,79 @@ class MainWindow(MainWindowBase, MainWindowUI):
         else:
             self.schaunach += 1
 
-    def getRoomTemp(self, room):
-        ret = udpRemote('{"command":"getTemperature"}\n', addr=self.bmehost, port=self.bmeport)
-        try: #if ret is an iterable object, except return error message
-            iter(ret)
-            #print("In try: ret=",ret)
-            return(ret)
-        except Exception as e:
-            ret = {"value":"Internal error: " + str(e)}
-            #print("In try: ret=",ret)
-            return(ret)
 
-    def getRoomPressure(self, room):
-        ret = udpRemote('{"command":"getPressure"}\n', addr=self.bmehost, port=self.bmeport)
-        try: #if ret is an iterable object, except return error message
-            iter(ret)
-            #print("In try: ret=",ret)
-            return(ret)
-        except Exception as e:
-            ret = {"value":"Internal error: " + str(e)}
-            #print("In try: ret=",ret)
-            return(ret)
 
-    def getRoomHumidity(self, room):
-        ret = udpRemote('{"command":"getHumidity"}\n', addr=self.bmehost, port=self.bmeport)
-        try: #if ret is an iterable object, except return error message
-            iter(ret)
-            #print("In try: ret=",ret)
-            return(ret)
-        except Exception as e:
-            ret = {"value":"Internal error: " + str(e)}
-            #print("In try: ret=",ret)
-            return(ret)
+    #def getRoomTemp(self, room):
+    #    ret = udpRemote('{"command":"getTemperature"}\n', addr=self.bmehost, port=self.bmeport)
+    #    try: #if ret is an iterable object, except return error message
+    #        iter(ret)
+    #        #print("In try: ret=",ret)
+    #        return(ret)
+    #    except Exception as e:
+    #        ret = {"value":"Internal error: " + str(e)}
+    #        #print("In try: ret=",ret)
+    #        return(ret)
+
+    #def getRoomPressure(self, room):
+    #    ret = udpRemote('{"command":"getPressure"}\n', addr=self.bmehost, port=self.bmeport)
+    #    try: #if ret is an iterable object, except return error message
+    #        iter(ret)
+    #        #print("In try: ret=",ret)
+    #        return(ret)
+    #    except Exception as e:
+    #        ret = {"value":"Internal error: " + str(e)}
+    #        #print("In try: ret=",ret)
+    #        return(ret)
+
+    #def getRoomHumidity(self, room):
+    #    ret = udpRemote('{"command":"getHumidity"}\n', addr=self.bmehost, port=self.bmeport)
+    #    try: #if ret is an iterable object, except return error message
+    #        iter(ret)
+    #        #print("In try: ret=",ret)
+    #        return(ret)
+    #    except Exception as e:
+    #        ret = {"value":"Internal error: " + str(e)}
+    #        #print("In try: ret=",ret)
+    #        return(ret)
+
+    def udpRx(self):
+        self.udpRxTstop = threading.Event()
+        rxValT = threading.Thread(target=self._udpRx)
+        rxValT.setDaemon(True)
+        rxValT.start()
+
+    def _udpRx(self):
+        port =  6664
+        print("Starting UDP client on port ", port)
+        udpclient = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, \
+                socket.IPPROTO_UDP)  # UDP
+        udpclient.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+        udpclient.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        udpclient.bind(("", port))
+        udpclient.setblocking(0)
+
+        while(not self.udpRxTstop.is_set()):
+            ready = select.select([udpclient], [], [], .1)
+            if ready[0]:
+                data, addr = udpclient.recvfrom(8192)
+                try:
+                    message = json.loads(data.decode())
+                    if("measurement" in message.keys()):
+                        meas = message["measurement"]
+                        for key in meas:
+                            self.display_rx_value(key, meas[key])
+                except Exception as e:
+                    print(str(e))
+
+    def display_rx_value(self, key, message):
+        if(key == "tempFlur"):
+            self.labelWzTemp.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
+        elif(key == "humFlur"):
+            self.labelWzHum.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
+        elif(key == "pressFlur"):
+            self.labelWzPress.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
+
+
 
     def _uhr(self):
         counter = 0
@@ -274,6 +316,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
         self.t_stop = threading.Event()
 
         self.uhr()
+        self.udpRx()
         self.operate = 0
         self.db = mysqldose(self.mysqluser, self.mysqlpass, self.mysqlserv, self.mysqldb)
         #self.mysql_success = False
