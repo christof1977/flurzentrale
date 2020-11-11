@@ -26,8 +26,6 @@ import json
 import select
 from kodijson import Kodi
 
-from libby import mysqldose
-from libby.mysqldose import mysqldose
 from libby.remote import udpRemote
 
 import resources_rc
@@ -148,30 +146,15 @@ class MainWindow(MainWindowBase, MainWindowUI):
             else:
                 uhrzeit="{0:0>2}".format(now.hour)+":"+"{0:0>2}".format(now.minute)
                 self.uhrzeitdp = 1
-
             # Reset labelStatus if text display for 3 seconds:
             if(self.labelStatusTime <= 2):
                 self.labelStatusTime += 1
             else:
                 self.labelStatus.setText("Dumdidum ...")
-
             self.labelTime.setText(uhrzeit)
             self.labelDate.setText(str(now.day).zfill(2)+'.'+str(now.month).zfill(2)+'.'+str(now.year))
             self.update_torstatus()
-            #self.update_temp()
-
-            if(counter < 59):
-                counter += 1
-            else:
-                counter = 0
-                try:
-                    self.labelWzTemp.setText(self.getRoomTemp("Wz")["value"])
-                    self.labelWzPress.setText(self.getRoomPressure("Wz")["value"])
-                    self.labelWzHum.setText(self.getRoomHumidity("Wz")["value"])
-                except:
-                    pass
             self.t_stop.wait(1)
-
 
     def uhr(self):
         self.labelStatusTime = 3
@@ -246,13 +229,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
 
     def __init__(self):
-        self.mysqluser = 'heizung'
-        self.mysqlpass = 'heizung'
-        self.mysqlserv = 'dose.local'
-        self.mysqldb   = 'heizung'
-
-        self.bmehost = "heizungeg.local"
-        self.bmeport = 5023
 
         super(self.__class__, self).__init__()
         self.setupUi(self) # gets defined in the UI file
@@ -270,11 +246,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
         self.uhr()
         self.udpRx()
-        self.operate = 0
-        self.db = mysqldose(self.mysqluser, self.mysqlpass, self.mysqlserv, self.mysqldb)
-        #self.mysql_success = False
-        self.db.start()
-        #self.hole_temp_db()
 
 def main():
     import platform
