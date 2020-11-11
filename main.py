@@ -143,11 +143,9 @@ class MainWindow(MainWindowBase, MainWindowUI):
             if self.uhrzeitdp == 1:
                 uhrzeit="{0:0>2}".format(now.hour)+" "+"{0:0>2}".format(now.minute)
                 self.uhrzeitdp = 0
-                print("tick")
             else:
                 uhrzeit="{0:0>2}".format(now.hour)+":"+"{0:0>2}".format(now.minute)
                 self.uhrzeitdp = 1
-                print("tock")
             # Reset labelStatus if text display for 3 seconds:
             if(self.labelStatusTime <= 2):
                 self.labelStatusTime += 1
