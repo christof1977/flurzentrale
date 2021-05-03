@@ -135,6 +135,11 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.labelTempDraussen1.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
         elif(key == "AussenKuecheTemp"):
             self.labelTempDraussen2.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
+        elif(key == "Garagentor"):
+            if(message['Value'] == "auf"):
+                self.pushButtonTor.setIcon(QtGui.QIcon("gui/garage_open.png"))
+            elif(message['Value'] == "zu"):
+                self.pushButtonTor.setIcon(QtGui.QIcon("gui/garage_closed.png"))
 
 
 
