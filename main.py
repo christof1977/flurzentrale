@@ -30,11 +30,11 @@ from libby.remote import udpRemote
 
 import resources_rc
 
-garagn_tcp_addr = 'garagn.local'
+garagn_tcp_addr = 'garagn.home'
 garagn_tcp_port = 80
 buffer_size = 1024
-radioConfigW  = ["Wohnzimmer", "osmd.local", "osmd", 5005]
-radioConfigA  = ["Arbeitszimmmer", "osme.local", None, None]
+radioConfigW  = ["Wohnzimmer", "osmd.home", "osmd", 5005]
+radioConfigA  = ["Arbeitszimmmer", "osme.home", None, None]
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -132,7 +132,9 @@ class MainWindow(MainWindowBase, MainWindowUI):
         elif(key == "pressFlur"):
             self.labelWzPress.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
         elif(key == "tempOekoAussen"):
-            self.labelTempDraussen.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
+            self.labelTempDraussen1.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
+        elif(key == "AussenKuecheTemp"):
+            self.labelTempDraussen2.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
 
 
 
