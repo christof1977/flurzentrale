@@ -32,6 +32,7 @@ import resources_rc
 
 garagn_tcp_addr = 'garagn.home'
 garagn_tcp_port = 80
+
 buffer_size = 1024
 radioConfigW  = ["Wohnzimmer", "osmd.home", "osmd", 5005]
 radioConfigA  = ["Arbeitszimmmer", "osme.home", None, None]
@@ -46,19 +47,6 @@ def resource_path(relative_path):
         #base_path = os.path.abspath(".")
 
     return path.join(base_path, relative_path)
-
-
-def sende(tcp_sock, tcp_addr, tcp_port, json_cmd):
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((tcp_addr, tcp_port))
-        s.send(json_cmd.encode())
-        data = s.recv(buffer_size, socket.MSG_WAITALL)
-        return data.decode()
-        s.close()
-    except Exception as e:
-        #print("Verbinungsfehler")
-        return '{"Aktion" : "Fehler", "Parameter" : "Verbindung"}\n'
 
 def json_dec(json_string):
     try:
@@ -79,22 +67,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
     def setStatus(self, msg):
         self.labelStatusTime = 0
         self.labelStatus.setText(msg)
-
-    def update_torstatus(self):
-        if(self.schaunach == 5):
-            json_cmd = '{"Aktion" : "Abfrage", "Parameter" : "Torstatus"}\n'
-            data = sende(1, garagn_tcp_addr, garagn_tcp_port, json_cmd)
-            #status = json.loads(data)
-            status = json_dec(data)
-            if(status['Aktion'] == "Antwort" and status['Parameter'] == "Auf"):
-                self.labelTorstatus.setText("Tor ist offen!")
-                self.labelTorstatus.setStyleSheet('color: red')
-            elif(status['Aktion'] == "Antwort" and status['Parameter'] == "Zu"):
-                self.labelTorstatus.setText("Tor ist zu.")
-                self.labelTorstatus.setStyleSheet('color: green')
-            self.schaunach = 0
-        else:
-            self.schaunach += 1
 
     def udpRx(self):
         self.udpRxTstop = threading.Event()
@@ -172,15 +144,9 @@ class MainWindow(MainWindowBase, MainWindowUI):
         uhrTh.start()
 
     def torAufZu(self):
-        #time.sleep(.5)
-        json_cmd = '{"Aktion" : "Kommando", "Parameter" : "TorAufZu"}\n'
+        json_cmd = '{"command" : "setTor" , "Request":"auf"}\n'
         self.labelStatus.setText("Warte kurz")
-        data = sende(1, garagn_tcp_addr, garagn_tcp_port, json_cmd)
-        status = json.loads(data)
-        if(status['Aktion'] == "Antwort" and status['Parameter'] == "OK"):
-            self.labelStatus.setText("Bassd")
-        else:
-            self.labelStatus.setText("Ups ...")
+        ret = udpRemote(json_cmd, addr="piesler", port=5005)
 
     def openRadioA(self):
         self.radioConfig = radioConfigA
