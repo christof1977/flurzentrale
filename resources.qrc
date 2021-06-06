@@ -34,6 +34,7 @@
         <file>gui/thermometer_small.png</file>
         <file>gui/timer_green.png</file>
         <file>gui/power_green.png</file>
+        <file>gui/sunflower.png</file>
     </qresource>
     <qresource prefix="/radiologos">
         <file>radiologos/starfm.jpg</file>

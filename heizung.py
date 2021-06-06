@@ -41,9 +41,11 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         self.pushButtonHome.clicked.connect(self.home)
         self.pushButtonDg.clicked.connect(self.selectDg)
         self.pushButtonEg.clicked.connect(self.selectEg)
+        self.pushButtonPiesler.clicked.connect(self.selectPiesler)
         self.hz = {}
         self.hz["EG"] = {}
         self.hz["DG"] = {}
+        self.hz["Piesler"] = {}
         self.floor = "EG"
         self.readConfig()
         self.tStop = threading.Event()
@@ -249,6 +251,11 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         self.init_screen()
         print(self.floor)
 
+    def selectPiesler(self):
+        self.floor = "Piesler"
+        self.init_screen()
+        print(self.floor)
+
     def btn_click(self,room):
         status = udpRemote('{"command" : "getRoomStatus", "Room" : "' + room + '"}', addr=self.hz[self.floor]["host"], port=5005)
         if(status["status"]["Status"] == "off"):
@@ -268,6 +275,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             self.config.read(configfile)
             self.hz["DG"]["host"] = self.config['BASE']['HeizungDG']
             self.hz["EG"]["host"] = self.config['BASE']['HeizungEG']
+            self.hz["Piesler"]["host"] = self.config['BASE']['Piesler']
         except:
             print("Configuration error")
 
