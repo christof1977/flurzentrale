@@ -35,6 +35,7 @@
         <file>gui/timer_green.png</file>
         <file>gui/power_green.png</file>
         <file>gui/sunflower.png</file>
+        <file>gui/power_red.png</file>
     </qresource>
     <qresource prefix="/radiologos">
         <file>radiologos/starfm.jpg</file>
