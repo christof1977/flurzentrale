@@ -30,12 +30,12 @@ from libby.remote import udpRemote
 
 import resources_rc
 
-garagn_tcp_addr = 'garagn.home'
+garagn_tcp_addr = 'garagn'
 garagn_tcp_port = 80
 
 buffer_size = 1024
-radioConfigW  = ["Wohnzimmer", "osmd.home", "osmd", 5005]
-radioConfigA  = ["Arbeitszimmmer", "osme.home", None, None]
+radioConfigW  = ["Wohnzimmer", "osmd", "osmd", 5005]
+radioConfigA  = ["Arbeitszimmmer", "osme", None, None]
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
