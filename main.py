@@ -27,6 +27,7 @@ import select
 from kodijson import Kodi
 
 from libby.remote import udpRemote
+import paho.mqtt.client as mqtt #import the client1
 
 import resources_rc
 
@@ -113,7 +114,20 @@ class MainWindow(MainWindowBase, MainWindowUI):
             elif(message['Value'] == "zu"):
                 self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_closed.png"))
 
+    def on_mqtt_message(self, client, userdata, message):
+        if(message.topic == "E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC"):
+            self.labelE3Batt.setText("{} %".format(message.payload.decode()))
+        if(message.topic == "E3DC/EMS_DATA/EMS_POWER_PV"):
+            self.labelE3PV.setText("{} Wh".format(message.payload.decode()))
+        if(message.topic == "E3DC/EMS_DATA/EMS_POWER_GRID"):
+            self.labelE3Netz.setText("{} Wh".format(message.payload.decode()))
 
+    def mqttc(self):
+        client = mqtt.Client()
+        client.connect("mqtt.plattentoni.de", 1883)
+        client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0)])
+        client.on_message = self.on_mqtt_message
+        client.loop_start()
 
     def _uhr(self):
         counter = 0
@@ -219,6 +233,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
         self.uhr()
         self.udpRx()
+        self.mqttc()
 
 def main():
     import platform
