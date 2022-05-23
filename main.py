@@ -116,18 +116,21 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
     def on_mqtt_message(self, client, userdata, message):
         if(message.topic == "E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC"):
-            self.labelE3Batt.setText("{} %".format(message.payload.decode()))
+            self.labelE3Batt.setText("{} %".format(round(float(message.payload.decode()),1)))
         if(message.topic == "E3DC/EMS_DATA/EMS_POWER_PV"):
             self.labelE3PV.setText("{} Wh".format(message.payload.decode()))
         if(message.topic == "E3DC/EMS_DATA/EMS_POWER_GRID"):
             self.labelE3Netz.setText("{} Wh".format(message.payload.decode()))
 
     def mqttc(self):
-        client = mqtt.Client()
-        client.connect("mqtt.plattentoni.de", 1883)
-        client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0)])
-        client.on_message = self.on_mqtt_message
-        client.loop_start()
+        try:
+            client = mqtt.Client()
+            client.connect("mqtt.plattentoni.de", 1883)
+            client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0)])
+            client.on_message = self.on_mqtt_message
+            client.loop_start()
+        except Exception as e:
+            print(e)
 
     def _uhr(self):
         counter = 0

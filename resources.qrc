@@ -36,6 +36,7 @@
         <file>gui/power_green.png</file>
         <file>gui/sunflower.png</file>
         <file>gui/power_red.png</file>
+        <file>gui/e3dc.png</file>
     </qresource>
     <qresource prefix="/radiologos">
         <file>radiologos/starfm.jpg</file>
