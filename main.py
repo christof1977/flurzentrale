@@ -21,6 +21,7 @@ import socket
 import time
 import sys
 import syslog
+import logging
 import datetime
 import json
 import select
@@ -30,6 +31,12 @@ from libby.remote import udpRemote
 import paho.mqtt.client as mqtt #import the client1
 
 import resources_rc
+
+logger = logging.getLogger('FLURZENTRALE')
+#logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
+
+
 
 garagn_tcp_addr = 'garagn'
 garagn_tcp_port = 80
@@ -122,12 +129,16 @@ class MainWindow(MainWindowBase, MainWindowUI):
         if(message.topic == "E3DC/EMS_DATA/EMS_POWER_GRID"):
             self.labelE3Netz.setText("{} Wh".format(message.payload.decode()))
 
+    def on_mqtt_connect(self, client, userdata, flags, rc):
+        logging.info("Connected MQTT Broker with result code " + str(rc))
+        client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0)])
+
     def mqttc(self):
         try:
             client = mqtt.Client()
-            client.connect("mqtt.plattentoni.de", 1883)
-            client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0)])
+            client.on_connect = self.on_mqtt_connect
             client.on_message = self.on_mqtt_message
+            client.connect("mqtt.plattentoni.de", 1883)
             client.loop_start()
         except Exception as e:
             print(e)
