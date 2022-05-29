@@ -63,7 +63,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         else: # Hier lang ohne erfolgreichen ping
             self.statusSignal.emit("Keine Antwort")
             self.stat = 1
-            print("nix is!")
+            #print("nix is!")
 
     def checkStatus(self):
         #print(self.stat)
@@ -203,9 +203,9 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
                 w.deleteLater()
         line_positions = [(i,j) for i in range(5) for j in range(1)]
         ans= udpRemote('{"command" : "getAlive"}', addr=self.hz[self.floor]["host"], port=5005)
-        print("Ans", ans)
+        #print("Ans", ans)
         if(ans == -1 or ans is None):
-            print("Mist")
+            #print("Mist")
             self.statusSignal.emit("Keine Antwort")
             self.home()
             return(-1)
@@ -248,17 +248,17 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         self.floor = "EG"
         #self.ping_controller()
         self.init_screen()
-        print(self.floor)
+        #print(self.floor)
 
     def selectDg(self):
         self.floor = "DG"
         self.init_screen()
-        print(self.floor)
+        #print(self.floor)
 
     def selectPiesler(self):
         self.floor = "Piesler"
         self.init_screen()
-        print(self.floor)
+        #print(self.floor)
 
     def btn_click(self,room):
         status = udpRemote('{"command" : "getRoomStatus", "Room" : "' + room + '"}', addr=self.hz[self.floor]["host"], port=5005)
@@ -266,7 +266,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             cmd = '{"command" : "setRoomShortTimer", "Room" : "' + room + '", "Mode": "on" ,"Time" : "900" }'
             ans = udpRemote(cmd, addr=self.hz[self.floor]["host"], port=5005)
             self.statusSignal.emit(room + " an")
-            print(ans)
+            #print(ans)
         else:
             cmd = '{"command" : "setRoomShortTimer", "Room" : "' + room + '", "Mode": "off" ,"Time" : "900" }'
             ans = udpRemote(cmd, addr=self.hz[self.floor]["host"], port=5005)
@@ -281,7 +281,8 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
             self.hz["EG"]["host"] = self.config['BASE']['HeizungEG']
             self.hz["Piesler"]["host"] = self.config['BASE']['Piesler']
         except:
-            print("Configuration error")
+            pass
+            #print("Configuration error")
 
     def home(self):
         #self.hide()
@@ -290,7 +291,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
 
     def get_status(self):
         self.status = udpRemote('{"command" : "getStatus"}', addr=self.hz[self.floor]["host"], port=5005)
-        print(self.status)
+        #print(self.status)
 
     def send_cmd(self, cmd):
         #print("Sending", cmd)
@@ -310,7 +311,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
                 self.update_status()
             except Exception as e:
                 self.statusSignal.emit("Fehler "+ str(e))
-                print(str(e))
+                #print(str(e))
             self.tStop.wait(5)
 
     def update(self):
