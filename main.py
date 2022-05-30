@@ -87,8 +87,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
     def _udpRx(self):
         port =  6664
-        logger.info("Starting UDP client on port ", port)
-            self.labelE3Netz.setText("{} {}".format(check_val(message.payload.decode())))
+        logger.info("Starting UDP client on port {}".format(port))
         udpclient = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, \
                 socket.IPPROTO_UDP)  # UDP
         udpclient.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
