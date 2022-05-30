@@ -65,7 +65,7 @@ def json_dec(json_string):
     except:
         json_string = '{"Aktion" : "Fehler", "Parameter" : "JSON"}\n'
         out = json.loads(json_string)
-        #print("Json-Fehler")
+        logger.warning("Json-Fehler")
     return out
 
 #MainWindowUI, MainWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/mainwindow.ui'))
@@ -87,7 +87,8 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
     def _udpRx(self):
         port =  6664
-        print("Starting UDP client on port ", port)
+        logger.info("Starting UDP client on port ", port)
+            self.labelE3Netz.setText("{} {}".format(check_val(message.payload.decode())))
         udpclient = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, \
                 socket.IPPROTO_UDP)  # UDP
         udpclient.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
@@ -105,7 +106,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
                         for key in meas:
                             self.display_rx_value(key, meas[key])
                 except Exception as e:
-                    print(str(e))
+                    logger.warning(str(e))
 
     def display_rx_value(self, key, message):
         if(key == "tempFlur"):
@@ -125,12 +126,26 @@ class MainWindow(MainWindowBase, MainWindowUI):
                 self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_closed.png"))
 
     def on_mqtt_message(self, client, userdata, message):
+        def check_val(val):
+            try:
+                val = float(val)
+                if abs(val) > 1000.0:
+                    val = round(val/1000.0, 2)
+                    unit = "kW"
+                else:
+                    unit = "W"
+            except:
+                return(-1)
+            return(val, unit)
+
         if(message.topic == "E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC"):
             self.labelE3Batt.setText("{} %".format(round(float(message.payload.decode()),1)))
         if(message.topic == "E3DC/EMS_DATA/EMS_POWER_PV"):
-            self.labelE3PV.setText("{} Wh".format(message.payload.decode()))
+            val, unit = check_val(message.payload.decode())
+            self.labelE3PV.setText("{} {}".format(val, unit))
         if(message.topic == "E3DC/EMS_DATA/EMS_POWER_GRID"):
-            self.labelE3Netz.setText("{} Wh".format(message.payload.decode()))
+            val, unit = check_val(message.payload.decode())
+            self.labelE3Netz.setText("{} {}".format(val, unit))
 
     def on_mqtt_connect(self, client, userdata, flags, rc):
         logger.info("Connected MQTT Broker with result code " + str(rc))
@@ -144,7 +159,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
             client.connect("mqtt.plattentoni.de", 1883)
             client.loop_start()
         except Exception as e:
-            print(e)
+            logger.warning(str(e))
 
     def _uhr(self):
         counter = 0
