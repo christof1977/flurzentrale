@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 from os import path, getenv
 
 import PyQt5
@@ -20,8 +19,7 @@ from threading import Thread
 import socket
 import time
 import sys
-import syslog
-import logging
+#import syslog
 import datetime
 import json
 import select
@@ -32,11 +30,15 @@ import paho.mqtt.client as mqtt #import the client1
 
 import resources_rc
 
-logger = logging.getLogger('FLURZENTRALE')
+import logging
+logger = logging.getLogger(__name__)
+try:
+    from systemd.journal import JournaldLogHandler
+    log.addHandler(JournaldLogHandler())
+except:
+    pass
 #logger.setLevel(logging.DEBUG)
 logger.setLevel(logging.INFO)
-
-
 
 garagn_tcp_addr = 'garagn'
 garagn_tcp_port = 80
@@ -266,4 +268,5 @@ def main():
     #sys.exit()
 
 if __name__ == "__main__":
+    logger = logging.getLogger('FLURZENTRALE')
     main()

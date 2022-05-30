@@ -16,7 +16,6 @@ from threading import Thread
 import socket
 import time
 import sys
-import syslog
 import datetime
 import json
 import urllib
@@ -26,6 +25,17 @@ from roomdetail import RoomDetailWindow
 
 #from libby import remote
 from libby.remote import udpRemote
+
+
+import logging
+logger = logging.getLogger(__name__)
+try:
+    from systemd.journal import JournaldLogHandler
+    log.addHandler(JournaldLogHandler())
+except:
+    pass
+#logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 
 HeizungWindowUI, HeizungWindowBase = loadUiType(path.join(path.dirname(path.abspath(__file__)), 'gui/heatingwindow.ui'))
