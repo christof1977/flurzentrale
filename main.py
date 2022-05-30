@@ -12,6 +12,7 @@ from radio import RadioWindow
 from ampi import AmpiWindow
 from oekofen import OekofenWindow
 from heizung import HeizungWindow
+from notification import NotificationWindow
 #from kodi import KodiWindow
 
 import threading
@@ -35,10 +36,16 @@ logger = logging.getLogger("FLURZENTRALE")
 try:
     from systemd.journal import JournaldLogHandler
     logger.addHandler(JournaldLogHandler())
+    logger.info("Logging to systemdi this time")
 except:
-    print("No systemd logger!")
-#logger.setLevel(logging.DEBUG)
+    fh = logging.FileHandler(path.expanduser("~/fz.log"))
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
+    logger.setLevel(logging.INFO)
+    logger.info("No systemd logger detected, logging to file instead")
 logger.setLevel(logging.INFO)
+#logger.setLevel(logging.INFO)
 
 
 garagn_tcp_addr = 'garagn'
@@ -125,6 +132,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
                 self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_closed.png"))
 
     def on_mqtt_message(self, client, userdata, message):
+        logging.debug("MQTT Message received: {} {}".format(message.topic, message.payload.decode()))
         def check_val(val):
             try:
                 val = float(val)
@@ -134,7 +142,8 @@ class MainWindow(MainWindowBase, MainWindowUI):
                 else:
                     unit = "W"
             except:
-                return(-1)
+                logger.warning("Something went wrong while unpacking the mqtt message")
+                return(-1, "xx")
             return(val, unit)
 
         if(message.topic == "E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC"):
