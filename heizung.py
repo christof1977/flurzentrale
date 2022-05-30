@@ -31,7 +31,7 @@ import logging
 logger = logging.getLogger(__name__)
 try:
     from systemd.journal import JournaldLogHandler
-    log.addHandler(JournaldLogHandler())
+    logger.addHandler(JournaldLogHandler())
 except:
     pass
 #logger.setLevel(logging.DEBUG)
@@ -62,6 +62,7 @@ class HeizungWindow(HeizungWindowBase, HeizungWindowUI):
         self.ping_controller()
         self.init_screen()
         self.update()
+        logger.info("Opening heizung window")
 
     def ping_controller(self):
         p = subprocess.Popen(['ping',self.hz[self.floor]["host"],'-c','1',"-W","2"])

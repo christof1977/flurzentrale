@@ -31,14 +31,15 @@ import paho.mqtt.client as mqtt #import the client1
 import resources_rc
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("FLURZENTRALE")
 try:
     from systemd.journal import JournaldLogHandler
-    log.addHandler(JournaldLogHandler())
+    logger.addHandler(JournaldLogHandler())
 except:
-    pass
+    print("No systemd logger!")
 #logger.setLevel(logging.DEBUG)
 logger.setLevel(logging.INFO)
+
 
 garagn_tcp_addr = 'garagn'
 garagn_tcp_port = 80
@@ -132,7 +133,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.labelE3Netz.setText("{} Wh".format(message.payload.decode()))
 
     def on_mqtt_connect(self, client, userdata, flags, rc):
-        logging.info("Connected MQTT Broker with result code " + str(rc))
+        logger.info("Connected MQTT Broker with result code " + str(rc))
         client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0)])
 
     def mqttc(self):
@@ -268,5 +269,5 @@ def main():
     #sys.exit()
 
 if __name__ == "__main__":
-    logger = logging.getLogger('FLURZENTRALE')
+    logger.info("Starting ...")
     main()
