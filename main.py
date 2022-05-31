@@ -12,7 +12,7 @@ from radio import RadioWindow
 from ampi import AmpiWindow
 from oekofen import OekofenWindow
 from heizung import HeizungWindow
-from notification import NotificationWindow
+#from notification import NotificationWindow
 #from kodi import KodiWindow
 
 import threading
@@ -132,7 +132,7 @@ class MainWindow(MainWindowBase, MainWindowUI):
                 self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_closed.png"))
 
     def on_mqtt_message(self, client, userdata, message):
-        logging.debug("MQTT Message received: {} {}".format(message.topic, message.payload.decode()))
+        #logging.debug("MQTT Message received: {} {}".format(message.topic, message.payload.decode()))
         def check_val(val):
             try:
                 val = float(val)
@@ -145,15 +145,18 @@ class MainWindow(MainWindowBase, MainWindowUI):
                 logger.warning("Something went wrong while unpacking the mqtt message")
                 return(-1, "xx")
             return(val, unit)
+        try:
+            if(message.topic == "E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC"):
+                self.labelE3Batt.setText("{} %".format(round(float(message.payload.decode()),1)))
+            if(message.topic == "E3DC/EMS_DATA/EMS_POWER_PV"):
+                val, unit = check_val(message.payload.decode())
+                self.labelE3PV.setText("{} {}".format(val, unit))
+            if(message.topic == "E3DC/EMS_DATA/EMS_POWER_GRID"):
+                val, unit = check_val(message.payload.decode())
+                self.labelE3Netz.setText("{} {}".format(val, unit))
+        except:
+            logger.warning("Shit happened!")
 
-        if(message.topic == "E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC"):
-            self.labelE3Batt.setText("{} %".format(round(float(message.payload.decode()),1)))
-        if(message.topic == "E3DC/EMS_DATA/EMS_POWER_PV"):
-            val, unit = check_val(message.payload.decode())
-            self.labelE3PV.setText("{} {}".format(val, unit))
-        if(message.topic == "E3DC/EMS_DATA/EMS_POWER_GRID"):
-            val, unit = check_val(message.payload.decode())
-            self.labelE3Netz.setText("{} {}".format(val, unit))
 
     def on_mqtt_connect(self, client, userdata, flags, rc):
         logger.info("Connected MQTT Broker with result code " + str(rc))
