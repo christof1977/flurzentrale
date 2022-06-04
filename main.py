@@ -12,7 +12,7 @@ from radio import RadioWindow
 from ampi import AmpiWindow
 from oekofen import OekofenWindow
 from heizung import HeizungWindow
-from notification import NotificationWindow
+#from notification import NotificationWindow
 #from kodi import KodiWindow
 
 import threading
@@ -44,8 +44,8 @@ except:
     logger.addHandler(fh)
     logger.setLevel(logging.INFO)
     logger.info("No systemd logger detected, logging to file instead")
+#logger.setLevel(logging.DEBUG)
 logger.setLevel(logging.INFO)
-#logger.setLevel(logging.INFO)
 
 
 garagn_tcp_addr = 'garagn'
@@ -125,11 +125,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.labelTempDraussen1.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
         elif(key == "AussenKuecheTemp"):
             self.labelTempDraussen2.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
-        elif(key == "Garagentor"):
-            if(message['Value'] == "auf"):
-                self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_open.png"))
-            elif(message['Value'] == "zu"):
-                self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_closed.png"))
 
     def on_mqtt_message(self, client, userdata, message):
         logging.debug("MQTT Message received: {} {}".format(message.topic, message.payload.decode()))
@@ -154,10 +149,15 @@ class MainWindow(MainWindowBase, MainWindowUI):
         if(message.topic == "E3DC/EMS_DATA/EMS_POWER_GRID"):
             val, unit = check_val(message.payload.decode())
             self.labelE3Netz.setText("{} {}".format(val, unit))
+        if(message.topic == "Garage/Tor"):
+            if(message.payload.decode() == "auf"):
+                self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_open.png"))
+            elif(message.payload.decode() == "zu"):
+                self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_closed.png"))
 
     def on_mqtt_connect(self, client, userdata, flags, rc):
         logger.info("Connected MQTT Broker with result code " + str(rc))
-        client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0)])
+        client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0), ("Garage/Tor", 0) ])
 
     def mqttc(self):
         try:
