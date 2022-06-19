@@ -123,8 +123,6 @@ class MainWindow(MainWindowBase, MainWindowUI):
             self.labelWzPress.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
         elif(key == "tempOekoAussen"):
             self.labelTempDraussen1.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
-        elif(key == "AussenKuecheTemp"):
-            self.labelTempDraussen2.setText("{} {}".format(round(message["Value"],1), message["Unit"]))
 
     def on_mqtt_message(self, client, userdata, message):
         #logging.debug("MQTT Message received: {} {}".format(message.topic, message.payload.decode()))
@@ -154,13 +152,16 @@ class MainWindow(MainWindowBase, MainWindowUI):
                     self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_open.png"))
                 elif(message.payload.decode() == "zu"):
                     self.pushButtonTor.setIcon(QtGui.QIcon(":/images/gui/garage_closed.png"))
+            if(message.topic == "Piesler/Aussenkueche/Temperatur"):
+                val, unit = check_val(message.payload.decode())
+                self.labelTempDraussen2.setText("{} {}".format(val, "°C"))
         except:
             logger.warning("Shit happened!")
 
 
     def on_mqtt_connect(self, client, userdata, flags, rc):
         logger.info("Connected MQTT Broker with result code " + str(rc))
-        client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0), ("Garage/Tor", 0) ])
+        client.subscribe([("E3DC/BAT_DATA/0/BAT_INFO/BAT_RSOC",0), ("E3DC/EMS_DATA/EMS_POWER_PV",0), ("E3DC/EMS_DATA/EMS_POWER_GRID",0), ("Garage/Tor", 0), ("Piesler/Aussenkueche/Temperatur", 0) ])
 
     def mqttc(self):
         try:
