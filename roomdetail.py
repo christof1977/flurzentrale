@@ -49,7 +49,7 @@ class RoomDetailWindow(RoomDetailWindowBase, RoomDetailWindowUI):
         self.init_screen()
 
     def get_timer(self, room):
-        cmd = {"command":"getTimer", "Room":room}
+        cmd = {"command":"getRoomTimer", "Room":room}
         ans= udpRemote(json.dumps(cmd), addr=self.host, port=5005)
         return(ans)
 
