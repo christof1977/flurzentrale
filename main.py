@@ -281,8 +281,8 @@ class MainWindow(MainWindowBase, MainWindowUI):
 
 def main():
     import platform
-    node = platform._syscmd_uname('-n')
-    os = platform._syscmd_uname('')
+    node = platform.node()
+    os = platform.system()
     machine = platform.machine()
     app = QApplication(sys.argv)
     anzeige = MainWindow()
