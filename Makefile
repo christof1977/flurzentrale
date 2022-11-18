@@ -32,7 +32,7 @@ clean:		## Remove generated files (env, docs, ...)
 	rm -rf dist 
 
 app:
-	/usr/local/bin/pyinstaller --windowed --onefile --icon=icon.icns flurzentrale.spec
+	/usr/local/bin/pyinstaller --noconfirm flurzentrale.spec
 
 
 help:		## Show this help
