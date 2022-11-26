@@ -1,5 +1,5 @@
 radioStations = {   "Radio Gong"        : ["http://webstream.gong971.de/gong971",":/radiologos/radiologos/gong971.png"],
-                    "StarFM"            : ["https://starfm-4.explodio.com/nuernberg.mp3",":/radiologos/radiologos/starfm.jpg"],
+                    "StarFM"            : ["https://stream.starfm.de/nbg/mp3-192/iradio3",":/radiologos/radiologos/starfm.jpg"],
                     "Antenne Bayern"    : ["https://www.antenne.de/webradio/antenne.m3u",":/radiologos/radiologos/antenne.png"],
                     "Rock Antenne"      : ["http://www.rockantenne.de/webradio/rockantenne.aac.pls",":/radiologos/radiologos/rockantenne.png"],
                     "Bayern 1"          : ["https://br-br1-franken.cast.addradio.de/br/br1/franken/mp3/mid",":/radiologos/radiologos/bayern1.png"],
