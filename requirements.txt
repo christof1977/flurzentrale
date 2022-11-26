@@ -1,2 +1,3 @@
 PyQt5
 kodi-json
+paho-mqtt
